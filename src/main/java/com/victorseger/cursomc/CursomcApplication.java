@@ -1,8 +1,12 @@
 package com.victorseger.cursomc;
 
 import com.victorseger.cursomc.domain.Categoria;
+import com.victorseger.cursomc.domain.Cidade;
+import com.victorseger.cursomc.domain.Estado;
 import com.victorseger.cursomc.domain.Produto;
 import com.victorseger.cursomc.repositories.CategoriaRepository;
+import com.victorseger.cursomc.repositories.CidadeRepository;
+import com.victorseger.cursomc.repositories.EstadoRepository;
 import com.victorseger.cursomc.repositories.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -19,6 +23,12 @@ public class CursomcApplication implements CommandLineRunner {
 
 	@Autowired
 	private ProdutoRepository produtoRepository;
+
+	@Autowired
+	private CidadeRepository cidadeRepository;
+
+	@Autowired
+	private EstadoRepository estadoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -44,6 +54,22 @@ public class CursomcApplication implements CommandLineRunner {
 
 		categoriaRepository.saveAll(Arrays.asList(cat1,cat2));
 		produtoRepository.saveAll(Arrays.asList(p1,p2,p3));
+
+		Estado est1 = new Estado(null, "Rio Grande do Sul");
+		Estado est2 = new Estado(null, "Santa Catarina");
+
+		Cidade c1 = new Cidade(null,"Porto Alegre", est1);
+		Cidade c2 = new Cidade(null,"Florianópolis", est2);
+		Cidade c3 = new Cidade(null, "Canoas", est1);
+
+		est1.getCidades().addAll(Arrays.asList(c1, c3));
+		est2.getCidades().addAll(Arrays.asList(c2));
+
+		estadoRepository.saveAll(Arrays.asList(est1,est2));
+		cidadeRepository.saveAll(Arrays.asList(c1,c2,c3));
+
+
+
 
 
 
