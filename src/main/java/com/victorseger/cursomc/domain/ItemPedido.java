@@ -1,5 +1,7 @@
 package com.victorseger.cursomc.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import java.io.Serializable;
@@ -9,6 +11,8 @@ import java.util.Objects;
 public class ItemPedido implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    //torna esse id não serializado (para não ocupar espaço na memória e não causar referencia ciclica)
+    @JsonIgnore
     //id embutido em um tipo auxiliar (chave composta entre produto e pedido)
     @EmbeddedId
     private ItemPedidoPK id = new ItemPedidoPK();
@@ -28,10 +32,13 @@ public class ItemPedido implements Serializable {
         this.preco = preco;
     }
 
+    //para evitar a referencia ciclica
+    @JsonIgnore
     public Pedido getPedido() {
         return id.getPedido();
     }
 
+    //este get pode ser serializado, pois queremos ver os produtos dentro do item pedido
     public Produto getProduto() {
         return id.getProduto();
     }
