@@ -18,7 +18,7 @@ public class CategoriaResource {
     private CategoriaService service;
 
     @RequestMapping(value="/{id}", method=RequestMethod.GET)
-    public ResponseEntity<?> find(@PathVariable Integer id) {
+    public ResponseEntity<Categoria> find(@PathVariable Integer id) {
         Categoria obj = service.find(id);
         return ResponseEntity.ok().body(obj);
     }
@@ -31,6 +31,14 @@ public class CategoriaResource {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(categoria.getId()).toUri();
 
         return ResponseEntity.created(uri).build();
+
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Void> update(@RequestBody Categoria categoria, @PathVariable Integer id) {
+        categoria.setId(id);
+        categoria = service.update(categoria);
+        return ResponseEntity.noContent().build();
 
     }
 }
