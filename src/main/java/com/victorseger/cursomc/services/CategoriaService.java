@@ -1,6 +1,7 @@
 package com.victorseger.cursomc.services;
 
 import com.victorseger.cursomc.domain.Categoria;
+import com.victorseger.cursomc.dto.CategoriaDTO;
 import com.victorseger.cursomc.repositories.CategoriaRepository;
 import com.victorseger.cursomc.services.exceptions.DataIntegrityException;
 import com.victorseger.cursomc.services.exceptions.ObjectNotFoundException;
@@ -58,5 +59,9 @@ public class CategoriaService {
         PageRequest pageRequest = PageRequest.of(page,linesPerPage, Sort.Direction.valueOf(direction), orderBy);
         //findAll com paginação direto do spring data
         return repo.findAll(pageRequest);
+    }
+
+    public Categoria fromDTO(CategoriaDTO categoriaDTO) {
+        return new Categoria(categoriaDTO.getId(),categoriaDTO.getNome());
     }
 }
