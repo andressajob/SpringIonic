@@ -36,8 +36,6 @@ public class ClienteService {
         return repo.save(newCliente);
     }
 
-
-
     public void delete(Integer id) {
         find(id);
         try {

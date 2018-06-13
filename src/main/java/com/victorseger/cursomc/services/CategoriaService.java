@@ -36,8 +36,10 @@ public class CategoriaService {
     }
 
     public Categoria update(Categoria categoria) {
-        find(categoria.getId());
-        return repo.save(categoria);
+        Categoria newCategoria = find(categoria.getId());
+        //chama o método auxiliar para apenas atualizar os campos desejados do categoria e não remover nenhum valor de outro campo
+        updateData(newCategoria,categoria);
+        return repo.save(newCategoria);
     }
 
     public void delete(Integer id) {
@@ -63,5 +65,9 @@ public class CategoriaService {
 
     public Categoria fromDTO(CategoriaDTO categoriaDTO) {
         return new Categoria(categoriaDTO.getId(),categoriaDTO.getNome());
+    }
+
+    private void updateData(Categoria newCategoria, Categoria categoria) {
+        newCategoria.setNome(categoria.getNome());
     }
 }
