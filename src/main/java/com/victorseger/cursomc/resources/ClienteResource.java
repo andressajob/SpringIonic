@@ -2,13 +2,17 @@ package com.victorseger.cursomc.resources;
 
 import com.victorseger.cursomc.domain.Cliente;
 import com.victorseger.cursomc.dto.ClienteDTO;
+import com.victorseger.cursomc.dto.ClienteNewDTO;
 import com.victorseger.cursomc.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,5 +63,18 @@ public class ClienteResource {
         Page<Cliente> clientePage = service.findPage(page,linesPerPage,orderBy,direction);
         Page<ClienteDTO> clienteDTO = clientePage.map(ClienteDTO::new);
         return ResponseEntity.ok().body(clienteDTO);
+    }
+
+    @Transactional
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO clienteDTO) {
+        Cliente cliente = service.fromDTO(clienteDTO);
+        cliente = service.insert(cliente);
+
+        //pega a URI do novo recurso inserido e adiciona ao final do "current request"
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(cliente.getId()).toUri();
+
+        return ResponseEntity.created(uri).build();
+
     }
 }
