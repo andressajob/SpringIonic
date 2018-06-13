@@ -4,6 +4,7 @@ import com.victorseger.cursomc.domain.Categoria;
 import com.victorseger.cursomc.dto.CategoriaDTO;
 import com.victorseger.cursomc.services.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -55,6 +56,19 @@ public class CategoriaResource {
         List<Categoria> categoriaList = service.findAll();
         //convertendo lista de categorias para lista de DTO (com os dados selecionados para exibir)
         List<CategoriaDTO> categoriaDTO = categoriaList.stream().map(cat -> new CategoriaDTO(cat)).collect(Collectors.toList());
+        return ResponseEntity.ok().body(categoriaDTO);
+    }
+
+    @RequestMapping(value = "/page",method=RequestMethod.GET)
+    public ResponseEntity<Page<CategoriaDTO>> findPage(
+            //anotação que torna os valores opcionais e não requisitos para a função
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "linesPerPage", defaultValue = "24")Integer linesPerPage,
+            @RequestParam(value = "orderBy", defaultValue = "nome")String orderBy,
+            @RequestParam(value = "direction", defaultValue = "ASC")String direction) {
+
+        Page<Categoria> categoriaPage = service.findPage(page,linesPerPage,orderBy,direction);
+        Page<CategoriaDTO> categoriaDTO = categoriaPage.map(CategoriaDTO::new);
         return ResponseEntity.ok().body(categoriaDTO);
     }
 
