@@ -15,6 +15,9 @@ public class Cliente implements Serializable {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
     private String nome;
+
+
+    @Column(unique = true)//anotação que torna impossivel ter mais de um cliente com o mesmo email sem mensagem personalizada (a exceção é lançada por exceção do banco)
     private String email;
     private String cpfOuCnpj;
     private Integer tipo;
