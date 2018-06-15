@@ -55,6 +55,7 @@ public class ClienteService {
         find(id);
         try {
             repo.deleteById(id);
+            //capturando a exceção de integridade de dados violada e adicionando mensagem personalizada
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityException("Não é possível excluir cliente que possui pedidos");
         }

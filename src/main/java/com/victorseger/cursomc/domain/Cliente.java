@@ -21,7 +21,8 @@ public class Cliente implements Serializable {
 
     //liberando a serialização dos endereços
     //@JsonManagedReference - foi recomendada a remoção pois apresentou problemas durante a execução
-    @OneToMany(mappedBy = "cliente")
+    //Cascade = ALL - toda operação que modificar um cliente, vai refletir nos endereços (ou seja, remoção de cliente, remove endereços associados tbm)
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<Endereco> enderecos = new ArrayList<>();
 
 
