@@ -27,10 +27,11 @@ public class PedidoResource {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Void> insert(@Valid @RequestBody Pedido pedido) {
 
-        Pedido ped = service.insert(pedido);
+        pedido = service.insert(pedido);
 
         //pega a URI do novo recurso inserido e adiciona ao final do "current request"
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(pedido.getId()).toUri();
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(pedido.getId()).toUri();
 
         return ResponseEntity.created(uri).build();
 
