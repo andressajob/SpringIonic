@@ -1,6 +1,8 @@
 package com.victorseger.cursomc.config;
 
 import com.victorseger.cursomc.services.DBService;
+import com.victorseger.cursomc.services.EmailService;
+import com.victorseger.cursomc.services.MockMailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +26,11 @@ public class TestConfig {
 
         dbService.instantiateDataBase();
         return true;
+    }
+
+    @Bean
+    public EmailService emailService() {
+        return new MockMailService();
     }
 
 }
