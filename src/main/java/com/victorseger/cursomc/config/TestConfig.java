@@ -21,6 +21,7 @@ public class TestConfig {
     private DBService dbService;
 
 
+    //método para instanciar base de dados
     @Bean
     public boolean instantiateDatabase() throws ParseException {
 
@@ -28,6 +29,7 @@ public class TestConfig {
         return true;
     }
 
+    //método para instanciar mail service mock
     @Bean
     public EmailService emailService() {
         return new MockMailService();

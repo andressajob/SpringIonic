@@ -27,6 +27,7 @@ public class DevConfig {
     @Bean
     public boolean instantiateDatabase() throws ParseException {
 
+        //instanciará a database somente se a estratégia de instanciação do banco for igual a create
         if(!"create".equals(strategy)) {
             return false;
         }
