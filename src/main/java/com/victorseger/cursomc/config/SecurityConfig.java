@@ -1,6 +1,7 @@
 package com.victorseger.cursomc.config;
 
 import com.victorseger.cursomc.security.JWTAuthenticationFilter;
+import com.victorseger.cursomc.security.JWTAuthorizationFilter;
 import com.victorseger.cursomc.security.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -60,6 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .antMatchers(HttpMethod.GET,PUBLIC_MATCHERS_GET).permitAll() // permite apenas operações get nos caminhos determinados
                 .anyRequest().authenticated();
         httpSecurity.addFilter(new JWTAuthenticationFilter(authenticationManager(),jwtUtil));
+        httpSecurity.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
