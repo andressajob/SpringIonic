@@ -1,5 +1,6 @@
 package com.victorseger.cursomc.services;
 
+import com.victorseger.cursomc.domain.Cliente;
 import com.victorseger.cursomc.domain.Pedido;
 import org.springframework.mail.SimpleMailMessage;
 
@@ -16,5 +17,9 @@ public interface EmailService {
 
     //envio de email com html
     void sendHtmlEmail(MimeMessage msg);
+
+    //envio de email com senha atualizada
+    void sendNewPasswordEmail(Cliente cliente, String newPass);
+
 
 }
