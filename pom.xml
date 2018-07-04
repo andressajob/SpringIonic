@@ -83,6 +83,20 @@
 		</dependency>
 
 
+		<!--Dependência que conecta com o amazon s3-->
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk</artifactId>
+			<version>LATEST</version>
+		</dependency>
+		<!--Dependência para extrair tipo dos arquivos de forma simplificada-->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>LATEST</version>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>
