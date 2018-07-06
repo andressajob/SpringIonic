@@ -2,6 +2,7 @@ package com.victorseger.cursomc.services;
 
 import com.victorseger.cursomc.services.exceptions.FileException;
 import org.apache.commons.io.FilenameUtils;
+import org.imgscalr.Scalr;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -52,7 +53,28 @@ public class ImageService {
         } catch (IOException e) {
             throw new FileException("Erro ao ler arquivo");
         }
+    };
+
+    //método para cortar imagem em quadrado
+    public BufferedImage cropImage(BufferedImage imageSource) {
+        int min = (imageSource.getHeight() <= imageSource.getWidth()) ? imageSource.getHeight() : imageSource.getWidth();
+
+        return Scalr.crop(
+                imageSource,
+                (imageSource.getWidth()/2) - (min/2),
+                (imageSource.getHeight()/2) - (min/2),
+                min,
+                min);
+
     }
+
+    //método para ajustar tamanho do arquivo da imagem
+    public BufferedImage resize(BufferedImage image, int size) {
+        return Scalr.resize(image,Scalr.Method.ULTRA_QUALITY, size);
+    }
+
+
+
 
 
 }
