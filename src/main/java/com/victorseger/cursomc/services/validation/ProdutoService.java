@@ -43,4 +43,13 @@ public class ProdutoService {
 
     }
 
+    public List<Produto> findAll() {
+        return repo.findAll();
+    }
+
+    public Produto save(Produto produto){
+        return repo.save(produto);
+    }
+
+
 }

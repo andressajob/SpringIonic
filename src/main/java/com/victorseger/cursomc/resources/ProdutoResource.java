@@ -7,8 +7,12 @@ import com.victorseger.cursomc.services.validation.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -41,5 +45,22 @@ public class ProdutoResource {
         return ResponseEntity.ok().body(produtoDTO);
     }
 
+    @GetMapping("/lista")
+    public ModelAndView listProducts(Model model) {
+        model.addAttribute("products", service.findAll());
+        return new ModelAndView("/product/list");
+    }
+
+    @GetMapping("/novo")
+    public ModelAndView newProduct(Model model) {
+        model.addAttribute("product", new Produto());
+        return new ModelAndView("/product/new");
+    }
+
+    @PostMapping("/salvar")
+    public ModelAndView saveProduct(@Valid Produto produto) {
+        service.save(produto);
+        return new ModelAndView("redirect:/produtos/lista");
+    }
 
 }
