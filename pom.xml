@@ -75,6 +75,12 @@
 			<artifactId>thymeleaf-extras-springsecurity4</artifactId>
 			<version>3.0.2.RELEASE</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.webjars.bowergithub.sweetalert2/sweetalert2 -->
+		<dependency>
+			<groupId>org.webjars.bowergithub.sweetalert2</groupId>
+			<artifactId>sweetalert2</artifactId>
+			<version>7.18.0</version>
+		</dependency>
 		<!-- dependência que bloqueia o acesso liberado aos endpoints rest e exige a utilização de classe de segurança (SecurityConfig)-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

@@ -1,4 +1,4 @@
-package com.victorseger.cursomc.services.validation;
+package com.victorseger.cursomc.services;
 
 import com.victorseger.cursomc.domain.Categoria;
 import com.victorseger.cursomc.domain.Produto;
@@ -33,12 +33,12 @@ public class ProdutoService {
     }
 
 
-    public Page<Produto> search(String nome, List<Integer> ids,Integer page, Integer linesPerPage, String orderBy, String direction) {
+    public Page<Produto> search(String nome, List<Integer> ids, Integer page, Integer linesPerPage, String orderBy, String direction) {
         //cria as páginas de requisição com parâmetros (num de páginas, quantidade por página, direção - convertido para Direction e campos para ordenação)
-        PageRequest pageRequest = PageRequest.of(page,linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
         List<Categoria> categorias = categoriaRepository.findAllById(ids);
 
-        return repo.search(nome,categorias,pageRequest);
+        return repo.search(nome, categorias, pageRequest);
         //return repo.findDistinctByNomeContainingANDAndCategoriasIn(nome,categorias,pageRequest);
 
     }
@@ -47,8 +47,13 @@ public class ProdutoService {
         return repo.findAll();
     }
 
-    public Produto save(Produto produto){
+    public Produto save(Produto produto) {
         return repo.save(produto);
+    }
+
+    public void delete(int id) {
+        if (repo.existsById(id))
+            repo.deleteById(id);
     }
 
 

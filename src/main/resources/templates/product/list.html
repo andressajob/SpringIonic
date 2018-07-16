@@ -1,4 +1,5 @@
-<html layout:decorate="~{/layouts/main}"  xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<html layout:decorate="~{/layouts/main}" xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.w3.org/1999/xhtml">
 
 <div layout:fragment="content">
     <div class="content-wrapper">
@@ -18,22 +19,31 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                            <thead>
+                            <thead class="text-center">
                             <tr>
                                 <th th:text="#{product.name}"></th>
                                 <th th:text="#{product.price}"></th>
+                                <th th:text="#{options}"></th>
                             </tr>
                             </thead>
-                            <tfoot>
+                            <tfoot class="text-center">
                             <tr>
                                 <th th:text="#{product.name}"></th>
                                 <th th:text="#{product.price}"></th>
+                                <th th:text="#{options}"></th>
                             </tr>
                             </tfoot>
                             <tbody>
                             <tr th:each="product: ${products}">
                                 <td th:text="${product.nome}"></td>
                                 <td th:text="${product.preco}"></td>
+                                <td class="text-center">
+                                    <a class="btn btn-primary" th:text="#{edit}"
+                                       th:href="@{|editar/${product.id}|}"></a>
+                                    <button class="btn btn-danger" th:text="#{delete}" th:onclick="'javascript:confirmAlert(\''+
+                                        #{confirm.msg} +'\', \'/produtos/excluir/'+ ${product.id} +'\');'"
+                                    ></button>
+                                </td>
                             </tr>
                             </tbody>
                         </table>
@@ -44,4 +54,26 @@
         </div>
     </div>
 </div>
+<th:block layout:fragment="js-view">
+    <script>
+        function confirmAlert(msg, redirectPage) {
+            swal({
+                title: "Atenção!",
+                text: msg,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Sim",
+                cancelButtonText: "Não",
+                allowOutsideClick: false
+            }).then(result => {
+                if (result.value) {
+                    window.location.href = redirectPage;
+                }
+            });
+        }
+    </script>
+    }
+</th:block>
+
 </html>

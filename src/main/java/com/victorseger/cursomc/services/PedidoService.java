@@ -11,7 +11,6 @@ import com.victorseger.cursomc.repositories.PedidoRepository;
 import com.victorseger.cursomc.security.UserSS;
 import com.victorseger.cursomc.services.exceptions.AuthorizationException;
 import com.victorseger.cursomc.services.exceptions.ObjectNotFoundException;
-import com.victorseger.cursomc.services.validation.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

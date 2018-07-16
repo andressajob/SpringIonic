@@ -3,11 +3,10 @@ package com.victorseger.cursomc.resources;
 import com.victorseger.cursomc.domain.Produto;
 import com.victorseger.cursomc.dto.ProdutoDTO;
 import com.victorseger.cursomc.resources.utils.URL;
-import com.victorseger.cursomc.services.validation.ProdutoService;
+import com.victorseger.cursomc.services.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -55,6 +54,18 @@ public class ProdutoResource {
     public ModelAndView newProduct(Model model) {
         model.addAttribute("product", new Produto());
         return new ModelAndView("/product/new");
+    }
+
+    @GetMapping("/editar/{id}")
+    public ModelAndView editProduct(Model model, @PathVariable int id) {
+        model.addAttribute("product", service.find(id));
+        return new ModelAndView("/product/new");
+    }
+
+    @GetMapping("/excluir/{id}")
+    public ModelAndView deleteProduct(Model model, @PathVariable int id) {
+        service.delete(id);
+        return new ModelAndView("redirect:/produtos/lista");
     }
 
     @PostMapping("/salvar")
