@@ -43,8 +43,10 @@ public class PedidoService {
     @Autowired
     private ClienteService clienteService;
 
+/*
     @Autowired
     private EmailService emailService;
+*/
 
 
     public Pedido find(Integer id) {
@@ -75,7 +77,7 @@ public class PedidoService {
         }
 
         itemPedidoRepository.saveAll(pedido.getItens());
-        emailService.sendOrderConfirmationHtmlEmail(pedido);
+        //emailService.sendOrderConfirmationHtmlEmail(pedido);
         return pedido;
 
     }
