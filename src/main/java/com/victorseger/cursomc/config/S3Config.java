@@ -1,3 +1,4 @@
+/*
 package com.victorseger.cursomc.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
@@ -27,3 +28,4 @@ public class S3Config {
         return s3client;
     }
 }
+*/

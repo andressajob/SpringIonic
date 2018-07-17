@@ -41,11 +41,13 @@ public class ClienteService{
     @Autowired
     private EnderecoRepository enderecoRepository;
 
-    @Autowired
-    private S3Service s3Service;
+/*    @Autowired
+    private S3Service s3Service;*/
 
+/*
     @Autowired
     private ImageService imageService;
+*/
 
     @Value("${img.prefix.client.profile}")
     private String prefix;
@@ -127,7 +129,7 @@ public class ClienteService{
         newCliente.setEmail(cliente.getEmail());
     }
 
-    public URI uploadProfilePicture(MultipartFile multipartFile) {
+   /* public URI uploadProfilePicture(MultipartFile multipartFile) {
         UserSS userSS = UserService.authenticated();
         if(userSS == null) {
             throw new AuthorizationException("Acesso negado");
@@ -141,7 +143,7 @@ public class ClienteService{
 
         return s3Service.uploadFile(imageService.getInputStream(imageJpg,"jpg"), filename, "image");
 
-    }
+    }*/
 
     //método de busca de cliente por e-mail
     public Cliente findByEmail(String email) {

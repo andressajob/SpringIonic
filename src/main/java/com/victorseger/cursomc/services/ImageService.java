@@ -1,3 +1,4 @@
+/*
 package com.victorseger.cursomc.services;
 
 import com.victorseger.cursomc.services.exceptions.FileException;
@@ -78,3 +79,4 @@ public class ImageService {
 
 
 }
+*/
