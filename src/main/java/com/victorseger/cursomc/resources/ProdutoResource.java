@@ -52,18 +52,20 @@ public class ProdutoResource {
 
     @GetMapping("/novo")
     public ModelAndView newProduct(Model model) {
-        model.addAttribute("product", new Produto());
+        model.addAttribute("product", new ProdutoDTO());
+        model.addAttribute("action", "new");
         return new ModelAndView("/product/new");
     }
 
     @GetMapping("/editar/{id}")
     public ModelAndView editProduct(Model model, @PathVariable int id) {
         model.addAttribute("product", service.find(id));
+        model.addAttribute("action", "edit");
         return new ModelAndView("/product/new");
     }
 
     @GetMapping("/excluir/{id}")
-    public ModelAndView deleteProduct(Model model, @PathVariable int id) {
+    public ModelAndView deleteProduct(@PathVariable int id) {
         service.delete(id);
         return new ModelAndView("redirect:/produtos/lista");
     }

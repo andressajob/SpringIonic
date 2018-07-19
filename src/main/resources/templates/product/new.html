@@ -7,9 +7,10 @@
             <!-- Breadcrumbs-->
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="#" th:text="#{product}"></a>
+                    <a href="/produtos/lista" th:text="#{product}"></a>
                 </li>
-                <li class="breadcrumb-item active" th:text="#{product.new}"></li>
+                <li th:if="${action == 'edit'}" class="breadcrumb-item active" th:text="#{product.edit}"></li>
+                <li th:if="${action == 'new'}" class="breadcrumb-item active" th:text="#{product.new}"></li>
             </ol>
             <div class="card card-register mx-auto mt-5">
                 <div class="card-header ">

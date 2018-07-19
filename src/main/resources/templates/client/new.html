@@ -1,0 +1,90 @@
+<html layout:decorate="~{/layouts/main}" xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+
+<div layout:fragment="content">
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/clientes/lista" th:text="#{client}"></a>
+                </li>
+                <li th:if="${action == 'edit'}" class="breadcrumb-item active" th:text="#{client.edit}"></li>
+                <li th:if="${action == 'new'}" class="breadcrumb-item active" th:text="#{client.new}"></li>
+            </ol>
+
+            <div class="card card-register mx-auto mt-5">
+                <div class="card-header ">
+                    <i class="fa fa-check-square-o"></i>
+                    <span th:text="#{client.form}"></span>
+                </div>
+                <div class="card-body">
+                    <form th:object="${client}" th:action="@{/clientes/salvar}" method="post">
+                        <div>
+                            <div class="form-group">
+                                <input type="hidden" id="id" th:field="*{id}">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label for="client-name" th:text="#{client.name}"></label>
+                                        <input class="form-control" id="client-name" type="text"
+                                               placeholder="Nome do cliente" th:field="*{nome}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label for="client-phones" th:text="#{client.phone}"></label>
+                                        <input class="form-control" id="client-phones" type="text"
+                                               placeholder="(XX) XXXX - XXXX" th:field="*{telefones}">
+                                    </div>
+                                </div>
+<!--                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label for="client-address" th:text="#{client-address}"></label>
+                                        <input class="form-control" id="client-address" type="text"
+                                               placeholder="Endereço detalhado" th:field="*{telefones}">
+                                    </div>
+                                </div>-->
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label for="client-email" th:text="#{client.email}"></label>
+                                        <input class="form-control" id="client-email" type="email"
+                                               placeholder="exemplo@exemplo.com" th:field="*{email}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label for="client-password" th:text="#{client.password}"></label>
+                                        <input class="form-control" id="client-password" type="password"
+                                               placeholder="Senha do cliente" th:field="*{senha}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label for="client-tipo" th:text="#{client.type}"></label>
+                                        <select class="form-control" id="client-tipo" th:field="*{tipo}">
+                                            <option th:each="type : ${types}" th:value="${type}"
+                                                    th:text="${type.descricao}"
+                                                    th:selected="${type} == ${client.tipo} ? true : false">
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label for="client-cpf-cnpj" th:text="#{client.cpfcnpj}"></label>
+                                        <input class="form-control" id="client-cpf-cnpj" type="text"
+                                               placeholder="CPF ou CNPJ do cliente" th:field="*{cpfOuCnpj}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group text-center">
+                                <button class="btn btn-success" type="submit" th:text="#{save}"></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

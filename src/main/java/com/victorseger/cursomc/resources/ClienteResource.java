@@ -1,6 +1,9 @@
 package com.victorseger.cursomc.resources;
 
 import com.victorseger.cursomc.domain.Cliente;
+import com.victorseger.cursomc.domain.Produto;
+import com.victorseger.cursomc.domain.enums.Perfil;
+import com.victorseger.cursomc.domain.enums.TipoCliente;
 import com.victorseger.cursomc.dto.ClienteDTO;
 import com.victorseger.cursomc.dto.ClienteNewDTO;
 import com.victorseger.cursomc.services.ClienteService;
@@ -9,8 +12,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -40,22 +45,22 @@ public class ClienteResource {
     }
 
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    /*@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Void> update(@Valid @RequestBody ClienteDTO clienteDTO, @PathVariable Integer id) {
         Cliente cliente = service.fromDTO(clienteDTO);
         cliente.setId(id);
         cliente = service.update(cliente);
         return ResponseEntity.noContent().build();
-    }
+    }*/
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    //@PreAuthorize("hasAnyRole('ADMIN')")
     @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    //@PreAuthorize("hasAnyRole('ADMIN')")
     @RequestMapping(method=RequestMethod.GET)
     public ResponseEntity<List<ClienteDTO>> findAll() {
         List<Cliente> clienteList = service.findAll();
@@ -64,7 +69,7 @@ public class ClienteResource {
         return ResponseEntity.ok().body(clienteDTO);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    //@PreAuthorize("hasAnyRole('ADMIN')")
     @RequestMapping(value = "/page",method=RequestMethod.GET)
     public ResponseEntity<Page<ClienteDTO>> findPage(
             //anotação que torna os valores opcionais e não requisitos para a função
@@ -98,5 +103,43 @@ public class ClienteResource {
         return ResponseEntity.created(uri).build();
 
     }*/
+
+    @GetMapping("/lista")
+    public ModelAndView listClients(Model model) {
+        model.addAttribute("clients", service.findAll());
+        return new ModelAndView("/client/list");
+    }
+
+    @GetMapping("/novo")
+    public ModelAndView newClient(Model model) {
+        model.addAttribute("client", new Cliente());
+        model.addAttribute("action", "new");
+        model.addAttribute("types", TipoCliente.values());
+        model.addAttribute("profiles", Perfil.values());
+        return new ModelAndView("/client/new");
+    }
+
+    @GetMapping("/editar/{id}")
+    public ModelAndView editClient(Model model, @PathVariable int id) {
+        model.addAttribute("client", service.find(id));
+        model.addAttribute("action", "edit");
+        model.addAttribute("types", TipoCliente.values());
+        model.addAttribute("profiles", Perfil.values());
+        return new ModelAndView("/client/new");
+    }
+
+    @GetMapping("/excluir/{id}")
+    public ModelAndView deleteClient(@PathVariable int id) {
+        service.delete(id);
+        return new ModelAndView("redirect:/clientes/lista");
+    }
+
+    @PostMapping("/salvar")
+    public ModelAndView saveClient(Cliente cliente) {
+        if (cliente.getId() != null) service.update(cliente);
+        else service.insert(cliente);
+        return new ModelAndView("redirect:/clientes/lista");
+    }
+
 
 }

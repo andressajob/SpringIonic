@@ -59,9 +59,9 @@ public class ClienteService{
 
         UserSS userSS = UserService.authenticated();
 
-        if(userSS == null || !userSS.hasRole(Perfil.ADMIN) && !id.equals(userSS.getId())) {
+        /*if(userSS == null || !userSS.hasRole(Perfil.ADMIN) && !id.equals(userSS.getId())) {
             throw new AuthorizationException("Acesso Negado!");
-        }
+        }*/
 
         Optional<Cliente> obj = repo.findById(id);
 
@@ -127,6 +127,9 @@ public class ClienteService{
     private void updateData(Cliente newCliente, Cliente cliente) {
         newCliente.setNome(cliente.getNome());
         newCliente.setEmail(cliente.getEmail());
+        newCliente.setCpfOuCnpj(cliente.getCpfOuCnpj());
+        newCliente.setTelefones(cliente.getTelefones());
+        newCliente.setTipo(cliente.getTipo());
     }
 
    /* public URI uploadProfilePicture(MultipartFile multipartFile) {
