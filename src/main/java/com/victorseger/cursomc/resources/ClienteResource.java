@@ -1,11 +1,13 @@
 package com.victorseger.cursomc.resources;
 
 import com.victorseger.cursomc.domain.Cliente;
+import com.victorseger.cursomc.domain.Endereco;
 import com.victorseger.cursomc.domain.Produto;
 import com.victorseger.cursomc.domain.enums.Perfil;
 import com.victorseger.cursomc.domain.enums.TipoCliente;
 import com.victorseger.cursomc.dto.ClienteDTO;
 import com.victorseger.cursomc.dto.ClienteNewDTO;
+import com.victorseger.cursomc.services.CidadeService;
 import com.victorseger.cursomc.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,6 +33,10 @@ public class ClienteResource {
 
     @Autowired
     private ClienteService service;
+
+    @Autowired
+    private CidadeService cidadeService;
+
 
     @RequestMapping(value="/{id}", method=RequestMethod.GET)
     public ResponseEntity<Cliente> find(@PathVariable Integer id) {
@@ -116,7 +123,7 @@ public class ClienteResource {
         model.addAttribute("action", "new");
         model.addAttribute("types", TipoCliente.values());
         model.addAttribute("profiles", Perfil.values());
-        return new ModelAndView("/client/new");
+        return new ModelAndView("/client/form");
     }
 
     @GetMapping("/editar/{id}")
@@ -125,7 +132,7 @@ public class ClienteResource {
         model.addAttribute("action", "edit");
         model.addAttribute("types", TipoCliente.values());
         model.addAttribute("profiles", Perfil.values());
-        return new ModelAndView("/client/new");
+        return new ModelAndView("/client/form");
     }
 
     @GetMapping("/excluir/{id}")
@@ -141,5 +148,19 @@ public class ClienteResource {
         return new ModelAndView("redirect:/clientes/lista");
     }
 
+    @GetMapping("/enderecos/{id}")
+    public ModelAndView addAddress(@PathVariable int id, Model model) {
+        model.addAttribute("client", service.find(id));
+        model.addAttribute("addresses", service.find(id).getEnderecos());
+        model.addAttribute("cities", cidadeService.findAll());
+        model.addAttribute("newAddress", new Endereco());
+        return new ModelAndView("/client/address/form");
+    }
+
+    @PostMapping("/salvarEndereco")
+    public ModelAndView saveAddress(@Valid Endereco endereco, @ModelAttribute("client") Cliente cliente) {
+        service.insertAddress(cliente, endereco);
+        return new ModelAndView("redirect:/clientes/editar/" + cliente.getId());
+    }
 
 }

@@ -132,6 +132,16 @@ public class ClienteService{
         newCliente.setTipo(cliente.getTipo());
     }
 
+    public void insertAddress (Cliente cliente, Endereco endereco){
+        endereco.setId(null);
+        Cliente newCliente = repo.getOne(cliente.getId());
+        endereco.setCliente(newCliente);
+        endereco = enderecoRepository.save(endereco);
+        newCliente.getEnderecos().add(endereco);
+        repo.save(newCliente);
+    }
+
+
    /* public URI uploadProfilePicture(MultipartFile multipartFile) {
         UserSS userSS = UserService.authenticated();
         if(userSS == null) {

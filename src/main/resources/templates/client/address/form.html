@@ -1,0 +1,88 @@
+<html layout:decorate="~{/layouts/main}" xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+
+<div layout:fragment="content">
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/clientes/lista" th:text="#{client}"></a>
+                </li>
+                <li class="breadcrumb-item active" th:text="#{address.new}"></li>
+            </ol>
+            <div>
+                <ul>
+                    <li th:each="address: ${addresses}" th:text="${address.logradouro + ', ' + address.numero + ' '
+                    + address.complemento + ' - ' + address.bairro + ' - CEP ' + address.cep + ' em ' + address.cidade.nome}"></li>
+                    <a ></a>
+                </ul>
+            </div>
+            <div class="card card-register mx-auto mt-5">
+                <div class="card-header">
+                    <i class="fa fa-check-square-o"></i>
+                    <span th:text="#{address.form}"></span>
+                </div>
+                <div class="card-body">
+                    <form th:object="${newAddress}" th:action="@{/clientes/salvarEndereco}" method="post">
+                        <div class="form-group">
+                            <input type="hidden" id="id-client" th:field="${client.id}">
+                            <input type="hidden" id="id" th:field="*{id}">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div class="form-row">
+                                        <div class="col-md-8">
+                                            <label for="address-street" th:text="#{address.street}"></label>
+                                            <input class="form-control" id="address-street" type="text"
+                                                   th:field="*{logradouro}">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="address-number" th:text="#{address.number}"></label>
+                                            <input class="form-control" id="address-number" type="number"
+                                                   th:field="*{numero}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label for="address-complement" th:text="#{address.complement}"></label>
+                                    <input class="form-control" id="address-complement" type="text"
+                                           th:field="*{complemento}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label for="address-neighborhood" th:text="#{address.neighborhood}"></label>
+                                    <input class="form-control" id="address-neighborhood" type="text"
+                                           th:field="*{bairro}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label for="address-zipcode" th:text="#{address.zipcode}"></label>
+                                    <input class="form-control" id="address-zipcode" type="text"
+                                           th:field="*{cep}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label for="address-city" th:text="#{address.city}"></label>
+                                    <select class="form-control" id="address-city" th:field="*{cidade}">
+                                        <option th:each="city : ${cities}" th:value="${city.id}"
+                                                th:text="${city.nome + ' - ' + city.estado.nome}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group text-center">
+                                <button class="btn btn-success" type="submit" th:text="#{save}"></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

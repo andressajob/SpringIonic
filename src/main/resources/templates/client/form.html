@@ -37,13 +37,11 @@
                                                placeholder="(XX) XXXX - XXXX" th:field="*{telefones}">
                                     </div>
                                 </div>
-<!--                                <div class="form-group">
+                                <div class="form-group" th:if="${action == 'edit'}">
                                     <div class="col-md-12">
-                                        <label for="client-address" th:text="#{client-address}"></label>
-                                        <input class="form-control" id="client-address" type="text"
-                                               placeholder="Endereço detalhado" th:field="*{telefones}">
+                                        <a class="d-block small mt-3" th:text="#{address.add}" th:href="@{|/clientes/enderecos/${client.id}|}"></a>
                                     </div>
-                                </div>-->
+                                </div>
                                 <div class="form-group">
                                     <div class="col-md-12">
                                         <label for="client-email" th:text="#{client.email}"></label>

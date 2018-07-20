@@ -16,4 +16,6 @@ public class CidadeService {
     public List<Cidade> findByEstado(Integer estadoId) {
         return repository.findCidades(estadoId);
     }
+
+    public List<Cidade> findAll() {return repository.findAll();}
 }
