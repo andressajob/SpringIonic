@@ -63,6 +63,12 @@ public class CategoriaService {
         return repo.findAll(pageRequest);
     }
 
+    public boolean existsById (Integer id){
+        if (id != null && id > 0)
+            return repo.existsById(id);
+        return false;
+    }
+
     public Categoria fromDTO(CategoriaDTO categoriaDTO) {
         return new Categoria(categoriaDTO.getId(),categoriaDTO.getNome());
     }

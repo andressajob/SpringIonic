@@ -21,19 +21,31 @@
                     <form th:object="${product}" th:action="@{/produtos/salvar}" method="post">
                         <div class="text-center">
                             <div class="form-group">
-                                <input type="hidden" id="id" th:field="*{id}">
-                                <div class="form-row">
-                                    <div class="col-md-8">
-                                        <label for="product-name" th:text="#{product.name}"></label>
-                                        <input class="form-control" id="product-name" type="text"
-                                               aria-describedby="nameHelp"
-                                               placeholder="Produto novo aqui" th:field="*{nome}">
+                                <div class="col-md-12">
+                                    <input type="hidden" id="id" th:field="*{id}">
+                                    <div class="form-row">
+                                        <div class="col-md-8">
+                                            <label for="product-name" th:text="#{product.name}"></label>
+                                            <input class="form-control" id="product-name" type="text"
+                                                   aria-describedby="nameHelp"
+                                                   placeholder="Produto novo aqui" th:field="*{nome}">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="product-price" th:text="#{product.price}"></label>
+                                            <input class="form-control" id="product-price" type="number" min="0.01"
+                                                   step="0.01"
+                                                   aria-describedby="nameHelp" placeholder="0.00" th:field="*{preco}">
+                                        </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <label for="product-price" th:text="#{product.price}"></label>
-                                        <input class="form-control" id="product-price" type="number" min="0.01"
-                                               step="0.01"
-                                               aria-describedby="nameHelp" placeholder="0.00" th:field="*{preco}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <span class="text-center" th:text="#{categories}"></span>
+                                <div class="form-row">
+                                    <div class="col-md-3 text-center" th:each="category: ${categories}">
+                                        <input th:if="${action == 'edit'}" type="checkbox" name="categories" th:field="*{categorias}" th:value="${category.id}"/>
+                                        <input th:if="${action == 'new'}" type="checkbox" name="categories" th:value="${category.id}"/>
+                                        <label th:text="${category.nome}"></label>
                                     </div>
                                 </div>
                             </div>
