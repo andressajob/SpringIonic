@@ -1,6 +1,7 @@
 package com.victorseger.cursomc.resources;
 
 
+import com.victorseger.cursomc.domain.Categoria;
 import com.victorseger.cursomc.domain.Cidade;
 import com.victorseger.cursomc.domain.Estado;
 import com.victorseger.cursomc.dto.CidadeDTO;
@@ -9,10 +10,9 @@ import com.victorseger.cursomc.services.CidadeService;
 import com.victorseger.cursomc.services.EstadoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,5 +41,38 @@ public class EstadoResource {
         return ResponseEntity.ok().body(dtoList);
     }
 
+
+    @GetMapping("/lista")
+    public ModelAndView listStates(Model model) {
+        model.addAttribute("states", service.findAll());
+        return new ModelAndView("/client/address/state/list");
+    }
+
+    @GetMapping("/novo")
+    public ModelAndView newState(Model model) {
+        model.addAttribute("state", new Estado());
+        model.addAttribute("action", "new");
+        return new ModelAndView("/client/address/state/form");
+    }
+
+    @PostMapping("/salvar")
+    public ModelAndView saveState(Estado estado) {
+        if (estado.getId() != null) service.update(estado);
+        else service.insert(estado);
+        return new ModelAndView("redirect:/estados/lista");
+    }
+
+    @GetMapping("/editar/{id}")
+    public ModelAndView editState(Model model, @PathVariable int id) {
+        model.addAttribute("state", service.getOne(id));
+        model.addAttribute("action", "edit");
+        return new ModelAndView("/client/address/state/form");
+    }
+
+    @GetMapping("/excluir/{id}")
+    public ModelAndView deleteState(@PathVariable int id) {
+        service.delete(id);
+        return new ModelAndView("redirect:/estados/lista");
+    }
 
 }

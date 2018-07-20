@@ -13,9 +13,12 @@
             </ol>
             <div>
                 <ul>
-                    <li th:each="address: ${addresses}" th:text="${address.logradouro + ', ' + address.numero + ' '
-                    + address.complemento + ' - ' + address.bairro + ' - CEP ' + address.cep + ' em ' + address.cidade.nome}"></li>
-                    <a ></a>
+                    <div th:each="address: ${addresses}">
+                        <li  th:text="${address.logradouro + ', ' + address.numero + ' ' + address.complemento + ' - '
+                        + address.bairro + ' - CEP ' + address.cep + ' em ' + address.cidade.nome}">
+                        </li>
+                        <a th:text="#{edit}" th:href="@{|/clientes/enderecos/${client.id}/editar/${address.id}|}"> </a>
+                    </div>
                 </ul>
             </div>
             <div class="card card-register mx-auto mt-5">
@@ -26,8 +29,9 @@
                 <div class="card-body">
                     <form th:object="${newAddress}" th:action="@{/clientes/salvarEndereco}" method="post">
                         <div class="form-group">
-                            <input type="hidden" id="id-client" th:field="${client.id}">
+                            <input type="hidden" id="id-client" th:field="*{cliente}">
                             <input type="hidden" id="id" th:field="*{id}">
+
                             <div class="form-group">
                                 <div class="col-md-12">
                                     <div class="form-row">

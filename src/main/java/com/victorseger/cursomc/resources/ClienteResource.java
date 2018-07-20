@@ -150,17 +150,33 @@ public class ClienteResource {
 
     @GetMapping("/enderecos/{id}")
     public ModelAndView addAddress(@PathVariable int id, Model model) {
+        Endereco endereco = new Endereco();
         model.addAttribute("client", service.find(id));
         model.addAttribute("addresses", service.find(id).getEnderecos());
         model.addAttribute("cities", cidadeService.findAll());
-        model.addAttribute("newAddress", new Endereco());
+        endereco.setCliente(service.find(id));
+        model.addAttribute("newAddress", endereco);
+        return new ModelAndView("/client/address/form");
+    }
+
+    @GetMapping("/enderecos/{id}/editar/{idEndereco}")
+    public ModelAndView editAddress(@PathVariable int id, @PathVariable int idEndereco, Model model) {
+        model.addAttribute("client", service.find(id));
+        model.addAttribute("addresses", service.find(id).getEnderecos());
+        model.addAttribute("cities", cidadeService.findAll());
+        model.addAttribute("newAddress", service.addressById(idEndereco));
         return new ModelAndView("/client/address/form");
     }
 
     @PostMapping("/salvarEndereco")
-    public ModelAndView saveAddress(@Valid Endereco endereco, @ModelAttribute("client") Cliente cliente) {
-        service.insertAddress(cliente, endereco);
-        return new ModelAndView("redirect:/clientes/editar/" + cliente.getId());
+    public ModelAndView saveAddress(@ModelAttribute("newAddress")@Valid Endereco endereco) {
+        if (endereco.getId() != null){
+            service.updateAddress(endereco);
+        } else{
+            //System.out.println("ID DO ENDEREÇO: " + endereco.getCliente().getId());
+            service.insertAddress(endereco);
+        }
+        return new ModelAndView("redirect:/clientes/editar/" + endereco.getCliente().getId());
     }
 
 }

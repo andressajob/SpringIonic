@@ -1,0 +1,53 @@
+<html layout:decorate="~{/layouts/main}" xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+
+<div layout:fragment="content">
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/cidades/lista" th:text="#{city}"></a>
+                </li>
+                <li th:if="${action == 'edit'}" class="breadcrumb-item active" th:text="#{city.edit}"></li>
+                <li th:if="${action == 'new'}" class="breadcrumb-item active" th:text="#{city.new}"></li>
+            </ol>
+            <div class="card card-register mx-auto mt-5">
+                <div class="card-header ">
+                    <i class="fa fa-check-square-o"></i>
+                    <span th:text="#{city.form}"></span>
+                </div>
+                <div class="card-body">
+                    <form th:object="${city}" th:action="@{/cidades/salvar}" method="post">
+                        <div class="text-center">
+                            <div class="form-group">
+                                <input type="hidden" id="id" th:field="*{id}">
+                                <div class="col-md-12">
+                                    <label for="city-name" th:text="#{city.name}"></label>
+                                    <input class="form-control" id="city-name" type="text"
+                                           aria-describedby="nameHelp"
+                                           placeholder="Nova cidade" th:field="*{nome}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label for="city-state" th:text="#{city.state}"></label>
+                                    <select class="form-control" id="city-state" th:field="*{estado}">
+                                        <option th:each="state : ${states}" th:value="${state.id}"
+                                                th:text="${state.nome}"
+                                                th:selected="${state} == ${city.estado} ? true : false">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-success" type="submit" th:text="#{save}"></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
