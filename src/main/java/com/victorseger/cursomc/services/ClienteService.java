@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.image.BufferedImage;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -148,6 +149,11 @@ public class ClienteService{
     public Endereco addressById (Integer id){
         return enderecoRepository.getOne(id);
     }
+
+    public List<Endereco> findAllAddressByClientId (Integer id){
+       return enderecoRepository.findAllByClienteId(id);
+    }
+
 
    /* public URI uploadProfilePicture(MultipartFile multipartFile) {
         UserSS userSS = UserService.authenticated();

@@ -10,8 +10,10 @@ import com.victorseger.cursomc.repositories.PagamentoRepository;
 import com.victorseger.cursomc.repositories.PedidoRepository;
 import com.victorseger.cursomc.security.UserSS;
 import com.victorseger.cursomc.services.exceptions.AuthorizationException;
+import com.victorseger.cursomc.services.exceptions.DataIntegrityException;
 import com.victorseger.cursomc.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -91,4 +94,25 @@ public class PedidoService {
         Cliente cliente = clienteService.find(userSS.getId());
         return repo.findByCliente(cliente,pageRequest);
     }
+
+    public boolean existsById (Integer id){
+        if (id != null && id > 0)
+            return repo.existsById(id);
+        return false;
+    }
+
+    public List<Pedido> findAll() {
+        return repo.findAll();
+    }
+
+    public void delete(Integer id) {
+        find(id);
+        try {
+            repo.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityException("Não é possível excluir pedido");
+        }
+
+    }
+
 }

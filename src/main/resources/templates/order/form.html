@@ -1,0 +1,118 @@
+<html layout:decorate="~{/layouts/main}" xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+
+<div layout:fragment="content">
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/pedidos/lista" th:text="#{order}"></a>
+                </li>
+                <li th:if="${action == 'edit'}" class="breadcrumb-item active" th:text="#{order.edit}"></li>
+                <li th:if="${action == 'new'}" class="breadcrumb-item active" th:text="#{order.new}"></li>
+            </ol>
+            <div class="card card-register mx-auto mt-5">
+                <div class="card-header ">
+                    <i class="fa fa-check-square-o"></i>
+                    <span th:text="#{order.form}"></span>
+                </div>
+                <div class="card-body">
+                    <form th:object="${order}" th:action="@{/pedidos/salvar}" method="post">
+                        <div class="text-center">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label for="order-client" th:text="#{order.client}"></label>
+                                    <select class="form-control" id="order-client" th:field="*{cliente}">
+                                        <option selected="" value="">--</option>
+                                        <option th:each="client : ${clients}" th:value="${client.id}"
+                                                th:text="${client.nome}"
+                                                th:selected="${client} == ${order.cliente} ? true : false">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label for="order-address" th:text="#{order.address}"></label>
+                                    <select class="form-control" name="order-address" id="order-address"
+                                            th:field="*{enderecoEntrega}">
+                                        <option selected="" value="">--</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="item">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div class="form-row">
+                                            <div class="col-md-4">
+                                                <label for="order-product" th:text="#{order.product}"></label>
+                                                <select class="form-control" id="order-product" name="">
+                                                    <option th:each="product : ${products}" th:value="${product}"
+                                                            th:text="${product.nome}"
+                                                            th:selected="${product} == ${order.itens} ? true : false">
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="order-qtd" th:text="#{order.qtd}"></label>
+                                                <input class="form-control" name="" placeholder="0"
+                                                       id="order-qtd" type="number">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="order-descont" th:text="#{order.descont}"></label>
+                                                <input class="form-control" name="" placeholder="10%"
+                                                       id="order-descont" type="number" min="0.1">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="order-price" th:text="#{order.price}"></label>
+                                                <input class="form-control" name="" placeholder="R$ 0.00"
+                                                       id="order-price" type="number" disabled=""/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button type="button" id="clonador" class="btn btn-default" th:text="#{order.add}"
+                                        onclick="duplicate();"></button>
+                                <button class="btn btn-success" type="submit" th:text="#{save}"></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block layout:fragment="js-view">
+    <script>
+        document.getElementById('clonador').onclick = duplicate;
+        var i = 0;
+        var original = document.getElementById('item');
+
+        $('#order-client').change(
+            function () {
+                $.getJSON("http://localhost:8080/pedidos/enderecos", {
+                    clientId: $(this).val(),
+                    ajax: 'true'
+                }, function (data) {
+                    var html = '<option value="" disabled="">--</option>';
+                    var len = data.length;
+                    for (var i = 0; i < len; i++) {
+                        html += '<option value="' + data[i].id + '">'
+                            + data[i].logradouro + ", " + data[i].numero + " " + data[i].complemento + " - "
+                            + data[i].bairro + " - CEP " + data[i].cep + " em " + data[i].cidade.nome + '</option>';
+                    }
+                    html += '</option>';
+                    $('#order-address').html(html);
+                });
+            });
+        function duplicate() {
+            var clone = original.cloneNode(true); // "deep" clone
+            clone.id = "item" + ++i; // there can only be one element with an ID
+            original.parentNode.appendChild(clone);
+        }
+    </script>
+</th:block>
+</html>
