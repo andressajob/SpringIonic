@@ -1,0 +1,101 @@
+<html layout:decorate="~{/layouts/main}" xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+
+<div layout:fragment="content">
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/pedidos/lista" th:text="#{order}"></a>
+                </li>
+                <li class="breadcrumb-item active" th:text="#{item.new}"></li>
+            </ol>
+            <div>
+                <ul>
+                    <div th:each="item: ${items}">
+                        <li th:text="${'Produto:  ' + item.id.produto.nome + ' com desconto de ' + item.desconto + ', quantidade: '
+                        + item.quantidade + ', valor total do item:  ' + item.preco}">
+                        </li>
+                        <a th:text="#{edit}" th:href="@{|/pedidos/itens/${order.id}/editar/${item.id.produto.id}|}"> </a>
+                        <a th:text="#{delete}" href="#" th:onclick="'javascript:confirmAlert(\''+
+                                        #{confirm.msg} +'\', \'/pedidos/itens/' + ${order.id} + '/excluir/' + ${item.id.produto.id} +'\');'"
+                        ></a>
+                    </div>
+                </ul>
+            </div>
+            <div class="card card-register mx-auto mt-5">
+                <div class="card-header">
+                    <i class="fa fa-check-square-o"></i>
+                    <span th:text="#{item.form}"></span>
+                </div>
+                <div class="card-body">
+                    <form th:object="${newItem}" th:action="@{/pedidos/salvarItem}" method="post">
+                        <div class="form-group">
+                            <input type="hidden" id="order" th:field="*{pedido}">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div class="form-row">
+                                        <div class="col-md-4">
+                                            <label for="order-product" th:text="#{order.product}"></label>
+                                            <select class="form-control" id="order-product" name="" th:field="*{produto}">
+                                                <option th:if="${action == 'new'}" th:each="product : ${products}" th:value="${product.id}"
+                                                        th:text="${product.nome}">
+                                                </option>
+                                                <option th:if="${action == 'edit'}" th:each="product : ${products}" th:value="${product.id}"
+                                                        th:text="${product.nome}"
+                                                        th:selected="${product} == ${newItem.produto} ? true : false"
+                                                        th:disabled="${product} == ${newItem.produto} ? false : true">
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label for="order-qtd" th:text="#{order.qtd}"></label>
+                                            <input class="form-control" name="" placeholder="0"
+                                                   id="order-qtd" type="number" min="1" th:field="*{quantidade}" required>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="order-descont" th:text="#{order.descont}"></label>
+                                            <input class="form-control" name="" placeholder="R$ 10.00"
+                                                   id="order-descont" type="number" min="0.0" th:field="*{desconto}">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="order-price" th:text="#{order.price}"></label>
+                                            <input class="form-control" name="" placeholder="R$ 0.00"
+                                                   id="order-price" type="number" th:field="*{preco}" disabled/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group text-center">
+                                <button class="btn btn-success" type="submit" th:text="#{save}"></button>
+                                <a th:href="@{|/pedidos/itens/${order.id}|}" class="btn btn-primary" th:text="#{new}"></a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block layout:fragment="js-view">
+<script>
+    function confirmAlert(msg, redirectPage) {
+        swal({
+            title: "Atenção!",
+            text: msg,
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Sim",
+            cancelButtonText: "Não",
+            allowOutsideClick: false
+        }).then(result => {
+            if (result.value) {
+                window.location.href = redirectPage;
+            }
+        });
+    }
+</script>
+</th:block>
+</html>

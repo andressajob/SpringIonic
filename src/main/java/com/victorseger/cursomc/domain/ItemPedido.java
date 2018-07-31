@@ -2,8 +2,7 @@ package com.victorseger.cursomc.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -17,6 +16,11 @@ public class ItemPedido implements Serializable {
     @JsonIgnore
     //id embutido em um tipo auxiliar (chave composta entre produto e pedido)
     @EmbeddedId
+    @AttributeOverrides
+            ({
+                    @AttributeOverride(name = "pedido", column = @Column(name = "pedido_id")),
+                    @AttributeOverride(name = "produto", column = @Column(name = "produto_id"))
+            })
     private ItemPedidoPK id = new ItemPedidoPK();
 
     private Double desconto;
@@ -35,7 +39,7 @@ public class ItemPedido implements Serializable {
     }
 
     public double getSubTotal() {
-        return (preco-desconto)*quantidade;
+        return (preco - desconto) * quantidade;
     }
 
     //para evitar a referencia ciclica
@@ -44,7 +48,7 @@ public class ItemPedido implements Serializable {
         return id.getPedido();
     }
 
-    public void setPedido(Pedido pedido){
+    public void setPedido(Pedido pedido) {
         id.setPedido(pedido);
     }
 
@@ -82,6 +86,11 @@ public class ItemPedido implements Serializable {
     }
 
     public Double getPreco() {
+        if (this.getId() != null) {
+            if (this.getId().getProduto() != null)
+                preco = quantidade * this.getId().getProduto().getPreco();
+        }
+
         return preco;
     }
 
@@ -105,6 +114,6 @@ public class ItemPedido implements Serializable {
     @Override
     public String toString() {
         NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
-        return getProduto().getNome() +", Qtd: " + getQuantidade() + ", Preço Unitário: " + numberFormat.format(getPreco()) + ", Subtotal: " + numberFormat.format(getSubTotal()) + "\n";
+        return getProduto().getNome() + ", Qtd: " + getQuantidade() + ", Preço Unitário: " + numberFormat.format(getPreco()) + ", Subtotal: " + numberFormat.format(getSubTotal()) + "\n";
     }
 }

@@ -19,6 +19,7 @@
                 </div>
                 <div class="card-body">
                     <form th:object="${order}" th:action="@{/pedidos/salvar}" method="post">
+                        <input type="hidden" id="id" th:field="*{id}">
                         <div class="text-center">
                             <div class="form-group">
                                 <div class="col-md-12">
@@ -32,7 +33,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" th:if="${action == 'new'}">
                                 <div class="col-md-12">
                                     <label for="order-address" th:text="#{order.address}"></label>
                                     <select class="form-control" name="order-address" id="order-address"
@@ -41,41 +42,26 @@
                                     </select>
                                 </div>
                             </div>
-                            <div id="item">
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                        <div class="form-row">
-                                            <div class="col-md-4">
-                                                <label for="order-product" th:text="#{order.product}"></label>
-                                                <select class="form-control" id="order-product" name="">
-                                                    <option th:each="product : ${products}" th:value="${product}"
-                                                            th:text="${product.nome}"
-                                                            th:selected="${product} == ${order.itens} ? true : false">
-                                                    </option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label for="order-qtd" th:text="#{order.qtd}"></label>
-                                                <input class="form-control" name="" placeholder="0"
-                                                       id="order-qtd" type="number">
-                                            </div>
-                                            <div class="col-md-3">
-                                                <label for="order-descont" th:text="#{order.descont}"></label>
-                                                <input class="form-control" name="" placeholder="10%"
-                                                       id="order-descont" type="number" min="0.1">
-                                            </div>
-                                            <div class="col-md-3">
-                                                <label for="order-price" th:text="#{order.price}"></label>
-                                                <input class="form-control" name="" placeholder="R$ 0.00"
-                                                       id="order-price" type="number" disabled=""/>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="form-group" th:if="${action == 'edit'}">
+                                <div class="col-md-12">
+                                    <label for="order-address" th:text="#{order.address}"></label>
+                                    <select class="form-control" name="order-address" id="order-address"
+                                            th:field="*{enderecoEntrega}">
+                                        <option th:each="address : *{cliente.enderecos}" th:value="${address.id}"
+                                                th:text="${address.logradouro + ', ' + address.numero + ' ' +
+                                                address.complemento + ' - ' + address.bairro + ' - CEP ' +
+                                                address.cep + ' em ' + address.cidade.nome}"
+                                                th:selected="${address} == ${order.enderecoEntrega} ? true : false">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group" th:if="${action == 'edit'}">
+                                <div class="col-md-12">
+                                    <a class="d-block small mt-3" th:text="#{order.add}" th:href="@{|/pedidos/itens/${order.id}|}"></a>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <button type="button" id="clonador" class="btn btn-default" th:text="#{order.add}"
-                                        onclick="duplicate();"></button>
                                 <button class="btn btn-success" type="submit" th:text="#{save}"></button>
                             </div>
                         </div>
@@ -86,11 +72,7 @@
     </div>
 </div>
 <th:block layout:fragment="js-view">
-    <script>
-        document.getElementById('clonador').onclick = duplicate;
-        var i = 0;
-        var original = document.getElementById('item');
-
+    <script th:inline="javascript">
         $('#order-client').change(
             function () {
                 $.getJSON("http://localhost:8080/pedidos/enderecos", {
@@ -108,11 +90,6 @@
                     $('#order-address').html(html);
                 });
             });
-        function duplicate() {
-            var clone = original.cloneNode(true); // "deep" clone
-            clone.id = "item" + ++i; // there can only be one element with an ID
-            original.parentNode.appendChild(clone);
-        }
     </script>
 </th:block>
 </html>

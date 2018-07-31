@@ -173,7 +173,6 @@ public class ClienteResource {
         if (endereco.getId() != null){
             service.updateAddress(endereco);
         } else{
-            //System.out.println("ID DO ENDEREÇO: " + endereco.getCliente().getId());
             service.insertAddress(endereco);
         }
         return new ModelAndView("redirect:/clientes/editar/" + endereco.getCliente().getId());

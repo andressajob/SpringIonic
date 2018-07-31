@@ -1,9 +1,6 @@
 package com.victorseger.cursomc.services;
 
-import com.victorseger.cursomc.domain.Cliente;
-import com.victorseger.cursomc.domain.ItemPedido;
-import com.victorseger.cursomc.domain.PagamentoComBoleto;
-import com.victorseger.cursomc.domain.Pedido;
+import com.victorseger.cursomc.domain.*;
 import com.victorseger.cursomc.domain.enums.EstadoPagamento;
 import com.victorseger.cursomc.repositories.ItemPedidoRepository;
 import com.victorseger.cursomc.repositories.PagamentoRepository;
@@ -20,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.FetchProfile;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -64,22 +62,22 @@ public class PedidoService {
         pedido.setId(null);
         pedido.setInstante(new Date());
         pedido.setCliente(clienteService.find(pedido.getCliente().getId()));
-        pedido.getPagamento().setEstado(EstadoPagamento.PENDENTE);
-        pedido.getPagamento().setPedido(pedido);
-        if(pedido.getPagamento() instanceof PagamentoComBoleto) {
+//        pedido.getPagamento().setEstado(EstadoPagamento.PENDENTE);
+//        pedido.getPagamento().setPedido(pedido);
+        /*if(pedido.getPagamento() instanceof PagamentoComBoleto) {
             PagamentoComBoleto pgtoBol = (PagamentoComBoleto) pedido.getPagamento();
             boletoService.preencherPagamentoComBoleto(pgtoBol, pedido.getInstante());
         }
-        pedido = repo.save(pedido);
         pagamentoRepository.save(pedido.getPagamento());
         for (ItemPedido itemPedido : pedido.getItens()) {
             itemPedido.setDesconto(0.0);
             itemPedido.setProduto(produtoService.find(itemPedido.getProduto().getId()));
             itemPedido.setPreco(itemPedido.getProduto().getPreco());
             itemPedido.setPedido(pedido);
-        }
+        }*/
+        pedido = repo.save(pedido);
 
-        itemPedidoRepository.saveAll(pedido.getItens());
+        //itemPedidoRepository.saveAll(pedido.getItens());
         //emailService.sendOrderConfirmationHtmlEmail(pedido);
         return pedido;
 
@@ -115,4 +113,57 @@ public class PedidoService {
 
     }
 
+    public Pedido update(Pedido pedido) {
+        Pedido newPedido = find(pedido.getId());
+        updateData(newPedido,pedido);
+        return repo.save(newPedido);
+    }
+
+    private void updateData(Pedido newPedido, Pedido pedido) {
+        newPedido.setCliente(pedido.getCliente());
+        newPedido.setEnderecoEntrega(pedido.getEnderecoEntrega());
+    }
+
+    public ItemPedido findItemById (Pedido pedido, Produto produto){
+        return itemPedidoRepository.findById_PedidoAndId_Produto(pedido, produto);
+    }
+
+    public void insertItem (ItemPedido itemPedido){
+        ItemPedidoPK pk = new ItemPedidoPK();
+        Pedido pedido = repo.getOne(itemPedido.getPedido().getId());
+        pk.setPedido(itemPedido.getPedido());
+        pk.setProduto(itemPedido.getProduto());
+        itemPedido.setId(pk);
+        if (itemPedido.getDesconto() == null)
+            itemPedido.setDesconto(0.0);
+        itemPedido = itemPedidoRepository.save(itemPedido);
+        pedido.getItens().add(itemPedido);
+        repo.save(pedido);
+    }
+
+    public void updateItem (ItemPedido itemPedido){
+        ItemPedido newItem = itemPedidoRepository.findById_PedidoAndId_Produto(itemPedido.getPedido(), itemPedido.getProduto());
+        updateDataItem(newItem,itemPedido);
+        itemPedidoRepository.save(newItem);
+    }
+
+    private void updateDataItem(ItemPedido newItem, ItemPedido itemPedido) {
+        ItemPedidoPK pk = new ItemPedidoPK();
+        pk.setPedido(itemPedido.getPedido());
+        pk.setProduto(itemPedido.getProduto());
+        newItem.setId(pk);
+        newItem.setDesconto(itemPedido.getDesconto());
+        newItem.setProduto(itemPedido.getProduto());
+        newItem.setPedido(itemPedido.getPedido());
+        newItem.setPreco(itemPedido.getPreco());
+        newItem.setQuantidade(itemPedido.getQuantidade());
+    }
+
+    public void deleteItem(ItemPedido itemPedido){
+        itemPedidoRepository.delete(itemPedidoRepository.findById_PedidoAndId_Produto(itemPedido.getPedido(), itemPedido.getProduto()));
+    }
+
+    public boolean existsItemPedido(Pedido pedido, Produto produto){
+        return itemPedidoRepository.findById_PedidoAndId_Produto(pedido, produto) != null;
+    }
 }
