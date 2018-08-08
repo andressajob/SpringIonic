@@ -19,9 +19,13 @@ public class CidadeResource {
     @Autowired
     private  EstadoService estadoService;
 
+    private boolean error = false;
+
     @GetMapping("/lista")
     public ModelAndView listCities(Model model) {
         model.addAttribute("cities", service.findAll());
+        model.addAttribute("error", error);
+        error = false;
         return new ModelAndView("/client/address/city/list");
     }
 
@@ -50,7 +54,7 @@ public class CidadeResource {
 
     @GetMapping("/excluir/{id}")
     public ModelAndView deleteCity(@PathVariable int id) {
-        service.delete(id);
+        if (!service.delete(id)) error = true;
         return new ModelAndView("redirect:/cidades/lista");
     }
 }

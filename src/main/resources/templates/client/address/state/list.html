@@ -21,7 +21,10 @@
                         <a class="btn btn-success" th:text="#{state.new}"
                            href="/estados/novo"></a>
                     </div>
-                    <div class="table-responsive">
+                    <div>
+                        <span th:if="${#lists.isEmpty(states)}" th:text="#{listisempty}" class="badge"> </span>
+                    </div>
+                    <div class="table-responsive" th:if="!${#lists.isEmpty(states)}">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead class="text-center">
                             <tr>
@@ -73,8 +76,22 @@
                 }
             });
         }
+        function errorAlert() {
+            swal({
+                title: "Erro!",
+                text: "Não foi possível excluir este estado. Existe(m) cidade(s) relacionada(s) a ele.",
+                type: "error",
+                showCancelButton: false,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Ok",
+                allowOutsideClick: false
+            });
+        }
+
+        if ([[${error}]] == true)
+            errorAlert();
     </script>
-    }
+
 </th:block>
 
 </html>

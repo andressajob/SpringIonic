@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@RequestMapping(value="/clientes")
+@RequestMapping(value = "/clientes")
 public class ClienteResource {
 
     @Autowired
@@ -37,8 +37,9 @@ public class ClienteResource {
     @Autowired
     private CidadeService cidadeService;
 
+    private boolean error = false;
 
-    @RequestMapping(value="/{id}", method=RequestMethod.GET)
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<Cliente> find(@PathVariable Integer id) {
         Cliente obj = service.find(id);
         return ResponseEntity.ok().body(obj);
@@ -46,7 +47,7 @@ public class ClienteResource {
 
     //endpoint para busca de cliente por email
     @RequestMapping(value = "/email", method = RequestMethod.GET)
-    public ResponseEntity<Cliente> find(@RequestParam(value = "value")String email) {
+    public ResponseEntity<Cliente> find(@RequestParam(value = "value") String email) {
         Cliente cliente = service.findByEmail(email);
         return ResponseEntity.ok().body(cliente);
     }
@@ -61,14 +62,14 @@ public class ClienteResource {
     }*/
 
     //@PreAuthorize("hasAnyRole('ADMIN')")
-    @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     //@PreAuthorize("hasAnyRole('ADMIN')")
-    @RequestMapping(method=RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<ClienteDTO>> findAll() {
         List<Cliente> clienteList = service.findAll();
         //convertendo lista de clientes para lista de DTO (com os dados selecionados para exibir)
@@ -77,15 +78,15 @@ public class ClienteResource {
     }
 
     //@PreAuthorize("hasAnyRole('ADMIN')")
-    @RequestMapping(value = "/page",method=RequestMethod.GET)
+    @RequestMapping(value = "/page", method = RequestMethod.GET)
     public ResponseEntity<Page<ClienteDTO>> findPage(
             //anotação que torna os valores opcionais e não requisitos para a função
             @RequestParam(value = "page", defaultValue = "0") Integer page,
-            @RequestParam(value = "linesPerPage", defaultValue = "24")Integer linesPerPage,
-            @RequestParam(value = "orderBy", defaultValue = "nome")String orderBy,
-            @RequestParam(value = "direction", defaultValue = "ASC")String direction) {
+            @RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage,
+            @RequestParam(value = "orderBy", defaultValue = "nome") String orderBy,
+            @RequestParam(value = "direction", defaultValue = "ASC") String direction) {
 
-        Page<Cliente> clientePage = service.findPage(page,linesPerPage,orderBy,direction);
+        Page<Cliente> clientePage = service.findPage(page, linesPerPage, orderBy, direction);
         Page<ClienteDTO> clienteDTO = clientePage.map(ClienteDTO::new);
         return ResponseEntity.ok().body(clienteDTO);
     }
@@ -156,6 +157,8 @@ public class ClienteResource {
         model.addAttribute("cities", cidadeService.findAll());
         endereco.setCliente(service.find(id));
         model.addAttribute("newAddress", endereco);
+        model.addAttribute("error", error);
+        error = false;
         return new ModelAndView("/client/address/form");
     }
 
@@ -168,11 +171,17 @@ public class ClienteResource {
         return new ModelAndView("/client/address/form");
     }
 
+    @GetMapping("/enderecos/{id}/excluir/{idEndereco}")
+    public ModelAndView deleteAddress(@PathVariable int id, @PathVariable int idEndereco, Model model) {
+        if (!service.deleteAddress(idEndereco)) error = true;
+        return new ModelAndView("redirect:/clientes/enderecos/" + id);
+    }
+
     @PostMapping("/salvarEndereco")
-    public ModelAndView saveAddress(@ModelAttribute("newAddress")@Valid Endereco endereco) {
-        if (endereco.getId() != null){
+    public ModelAndView saveAddress(@ModelAttribute("newAddress") @Valid Endereco endereco) {
+        if (endereco.getId() != null) {
             service.updateAddress(endereco);
-        } else{
+        } else {
             service.insertAddress(endereco);
         }
         return new ModelAndView("redirect:/clientes/editar/" + endereco.getCliente().getId());

@@ -22,7 +22,9 @@ public class CidadeService {
         return repository.findCidades(estadoId);
     }
 
-    public List<Cidade> findAll() {return repository.findAll();}
+    public List<Cidade> findAll() {
+        return repository.findAll();
+    }
 
     public Cidade find(Integer id) {
         Optional<Cidade> obj = repository.findById(id);
@@ -31,28 +33,35 @@ public class CidadeService {
                 "Objeto não encontrado! Id: " + ", Tipo: " + Cidade.class.getName()));
     }
 
-    public Cidade getOne (Integer id) {return repository.getOne(id);}
+    public Cidade getOne(Integer id) {
+        return repository.getOne(id);
+    }
 
     public Cidade insert(Cidade cidade) {
-        cidade.setId(null);
-        return repository.save(cidade);
+        if (cidade.getNome() != null && !cidade.getNome().isEmpty()) {
+            cidade.setId(null);
+            return repository.save(cidade);
+        } else return null;
     }
 
     public Cidade update(Cidade cidade) {
-        Cidade newCidade = find(cidade.getId());
-        //chama o método auxiliar para apenas atualizar os campos desejados do cidade e não remover nenhum valor de outro campo
-        updateData(newCidade,cidade);
-        return repository.save(newCidade);
+        if (cidade.getNome() != null && !cidade.getNome().isEmpty()) {
+            Cidade newCidade = find(cidade.getId());
+            //chama o método auxiliar para apenas atualizar os campos desejados do cidade e não remover nenhum valor de outro campo
+            updateData(newCidade, cidade);
+            return repository.save(newCidade);
+        } else return null;
     }
 
-    public void delete(Integer id) {
+    public boolean delete(Integer id) {
+        boolean flag = true;
         find(id);
         try {
             repository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
-            throw new DataIntegrityException("Não é possível excluir cidade que possui relação com endereços.");
+            flag = false;
         }
-
+        return flag;
     }
 
     private void updateData(Cidade newCidade, Cidade cidade) {

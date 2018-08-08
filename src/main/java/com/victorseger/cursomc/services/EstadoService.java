@@ -29,28 +29,35 @@ public class EstadoService {
         return estadoRepository.findAllByOrderByNome();
     }
 
-    public Estado getOne (Integer id) {return estadoRepository.getOne(id);}
+    public Estado getOne(Integer id) {
+        return estadoRepository.getOne(id);
+    }
 
     public Estado insert(Estado estado) {
-        estado.setId(null);
-        return estadoRepository.save(estado);
+        if (estado.getNome() != null && !estado.getNome().isEmpty()) {
+            estado.setId(null);
+            return estadoRepository.save(estado);
+        } else return null;
     }
 
     public Estado update(Estado estado) {
-        Estado newEstado = find(estado.getId());
-        //chama o método auxiliar para apenas atualizar os campos desejados do estado e não remover nenhum valor de outro campo
-        updateData(newEstado,estado);
-        return estadoRepository.save(newEstado);
+        if (estado.getNome() != null && !estado.getNome().isEmpty()) {
+            Estado newEstado = find(estado.getId());
+            //chama o método auxiliar para apenas atualizar os campos desejados do estado e não remover nenhum valor de outro campo
+            updateData(newEstado, estado);
+            return estadoRepository.save(newEstado);
+        } else return null;
     }
 
-    public void delete(Integer id) {
+    public boolean delete(Integer id) {
+        boolean flag = true;
         find(id);
         try {
             estadoRepository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
-            throw new DataIntegrityException("Não é possível excluir estado que possui produtos");
+            flag = false;
         }
-
+        return flag;
     }
 
     private void updateData(Estado newEstado, Estado estado) {

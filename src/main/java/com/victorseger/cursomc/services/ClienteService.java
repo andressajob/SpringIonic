@@ -31,7 +31,7 @@ import java.util.Optional;
 
 
 @Service
-public class ClienteService{
+public class ClienteService {
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -80,7 +80,7 @@ public class ClienteService{
     public Cliente update(Cliente cliente) {
         Cliente newCliente = find(cliente.getId());
         //chama o método auxiliar para apenas atualizar os campos desejados do cliente e não remover nenhum valor de outro campo
-        updateData(newCliente,cliente);
+        updateData(newCliente, cliente);
         return repo.save(newCliente);
     }
 
@@ -101,25 +101,25 @@ public class ClienteService{
 
     public Page<Cliente> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
         //cria as páginas de requisição com parâmetros (num de páginas, quantidade por página, direção - convertido para Direction e campos para ordenação)
-        PageRequest pageRequest = PageRequest.of(page,linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
         //findAll com paginação direto do spring data
         return repo.findAll(pageRequest);
     }
 
     public Cliente fromDTO(ClienteDTO clienteDTO) {
-        return new Cliente(clienteDTO.getId(),clienteDTO.getNome(),clienteDTO.getEmail(),null,null, null);
+        return new Cliente(clienteDTO.getId(), clienteDTO.getNome(), clienteDTO.getEmail(), null, null, null);
     }
 
     public Cliente fromDTO(ClienteNewDTO clienteDTO) {
-        Cliente cliente = new Cliente(null,clienteDTO.getNome(),clienteDTO.getEmail(),clienteDTO.getCpfOuCnpj(), TipoCliente.toEnum(clienteDTO.getTipo()),bCryptPasswordEncoder.encode(clienteDTO.getSenha())); // codificando a senha
-        Cidade cidade = new Cidade(clienteDTO.getCidadeId(),null,null);
-        Endereco end = new Endereco(null,clienteDTO.getLogradouro(),clienteDTO.getNumero(),clienteDTO.getComplemento(),clienteDTO.getBairro(),clienteDTO.getCep(),cliente, cidade);
+        Cliente cliente = new Cliente(null, clienteDTO.getNome(), clienteDTO.getEmail(), clienteDTO.getCpfOuCnpj(), TipoCliente.toEnum(clienteDTO.getTipo()), bCryptPasswordEncoder.encode(clienteDTO.getSenha())); // codificando a senha
+        Cidade cidade = new Cidade(clienteDTO.getCidadeId(), null, null);
+        Endereco end = new Endereco(null, clienteDTO.getLogradouro(), clienteDTO.getNumero(), clienteDTO.getComplemento(), clienteDTO.getBairro(), clienteDTO.getCep(), cliente, cidade);
         cliente.getEnderecos().add(end);
         cliente.getTelefones().add(clienteDTO.getTelefone1());
-        if(clienteDTO.getTelefone2()!=null) {
+        if (clienteDTO.getTelefone2() != null) {
             cliente.getTelefones().add(clienteDTO.getTelefone2());
         }
-        if(clienteDTO.getTelefone3()!=null) {
+        if (clienteDTO.getTelefone3() != null) {
             cliente.getTelefones().add(clienteDTO.getTelefone3());
         }
         return cliente;
@@ -133,7 +133,7 @@ public class ClienteService{
         newCliente.setTipo(cliente.getTipo());
     }
 
-    public void insertAddress (Endereco endereco){
+    public void insertAddress(Endereco endereco) {
         endereco.setId(null);
         Cliente newCliente = repo.getOne(endereco.getCliente().getId());
         endereco.setCliente(newCliente);
@@ -142,18 +142,32 @@ public class ClienteService{
         repo.save(newCliente);
     }
 
-    public void updateAddress (Endereco endereco){
+    public void updateAddress(Endereco endereco) {
         enderecoRepository.save(endereco);
     }
 
-    public Endereco addressById (Integer id){
-        return enderecoRepository.getOne(id);
+    public Endereco addressById(Integer id) {
+        if (enderecoRepository.existsById(id))
+            return enderecoRepository.getOne(id);
+        return null;
     }
 
-    public List<Endereco> findAllAddressByClientId (Integer id){
-       return enderecoRepository.findAllByClienteId(id);
+    public List<Endereco> findAllAddressByClientId(Integer id) {
+        return enderecoRepository.findAllByClienteId(id);
     }
 
+    public boolean deleteAddress(Integer id) {
+        boolean flag = true;
+        find(id);
+        try {
+            if (enderecoRepository.existsById(id))
+                enderecoRepository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            flag = false;
+        }
+        return flag;
+
+    }
 
    /* public URI uploadProfilePicture(MultipartFile multipartFile) {
         UserSS userSS = UserService.authenticated();
@@ -174,7 +188,7 @@ public class ClienteService{
     //método de busca de cliente por e-mail
     public Cliente findByEmail(String email) {
         UserSS userss = UserService.authenticated();
-        if(userss == null || !userss.hasRole(Perfil.ADMIN) && !email.equals(userss.getUsername())) {
+        if (userss == null || !userss.hasRole(Perfil.ADMIN) && !email.equals(userss.getUsername())) {
             throw new AuthorizationException("Acesso negado");
         }
 

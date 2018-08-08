@@ -27,6 +27,8 @@ public class EstadoResource {
     @Autowired
     private CidadeService cidadeService;
 
+    private boolean error = false;
+
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<EstadoDTO>> findAll() {
         List<Estado> list = service.findAll();
@@ -45,6 +47,8 @@ public class EstadoResource {
     @GetMapping("/lista")
     public ModelAndView listStates(Model model) {
         model.addAttribute("states", service.findAll());
+        model.addAttribute("error", error);
+        error = false;
         return new ModelAndView("/client/address/state/list");
     }
 
@@ -71,7 +75,7 @@ public class EstadoResource {
 
     @GetMapping("/excluir/{id}")
     public ModelAndView deleteState(@PathVariable int id) {
-        service.delete(id);
+        if (!service.delete(id)) error = true;
         return new ModelAndView("redirect:/estados/lista");
     }
 

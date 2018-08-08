@@ -152,7 +152,8 @@ public class PedidoService {
         pk.setPedido(itemPedido.getPedido());
         pk.setProduto(itemPedido.getProduto());
         newItem.setId(pk);
-        newItem.setDesconto(itemPedido.getDesconto());
+        if (itemPedido.getDesconto() != null) newItem.setDesconto(itemPedido.getDesconto());
+        else newItem.setDesconto(0.0);
         newItem.setProduto(itemPedido.getProduto());
         newItem.setPedido(itemPedido.getPedido());
         newItem.setPreco(itemPedido.getPreco());

@@ -20,13 +20,14 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@RequestMapping(value="/categorias")
+@RequestMapping(value = "/categorias")
 public class CategoriaResource {
 
     @Autowired
     private CategoriaService service;
+    private boolean error = false;
 
-    @RequestMapping(value="/{id}", method=RequestMethod.GET)
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<Categoria> find(@PathVariable Integer id) {
         Categoria obj = service.find(id);
         return ResponseEntity.ok().body(obj);
@@ -55,13 +56,13 @@ public class CategoriaResource {
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
-    @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
 
-    @RequestMapping(method=RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<CategoriaDTO>> findAll() {
         List<Categoria> categoriaList = service.findAll();
         //convertendo lista de categorias para lista de DTO (com os dados selecionados para exibir)
@@ -69,15 +70,15 @@ public class CategoriaResource {
         return ResponseEntity.ok().body(categoriaDTO);
     }
 
-    @RequestMapping(value = "/page",method=RequestMethod.GET)
+    @RequestMapping(value = "/page", method = RequestMethod.GET)
     public ResponseEntity<Page<CategoriaDTO>> findPage(
             //anotação que torna os valores opcionais e não requisitos para a função
             @RequestParam(value = "page", defaultValue = "0") Integer page,
-            @RequestParam(value = "linesPerPage", defaultValue = "24")Integer linesPerPage,
-            @RequestParam(value = "orderBy", defaultValue = "nome")String orderBy,
-            @RequestParam(value = "direction", defaultValue = "ASC")String direction) {
+            @RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage,
+            @RequestParam(value = "orderBy", defaultValue = "nome") String orderBy,
+            @RequestParam(value = "direction", defaultValue = "ASC") String direction) {
 
-        Page<Categoria> categoriaPage = service.findPage(page,linesPerPage,orderBy,direction);
+        Page<Categoria> categoriaPage = service.findPage(page, linesPerPage, orderBy, direction);
         Page<CategoriaDTO> categoriaDTO = categoriaPage.map(CategoriaDTO::new);
         return ResponseEntity.ok().body(categoriaDTO);
     }
@@ -85,6 +86,8 @@ public class CategoriaResource {
     @GetMapping("/lista")
     public ModelAndView listCategories(Model model) {
         model.addAttribute("categories", service.findAll());
+        model.addAttribute("error", error);
+        error = false;
         return new ModelAndView("/product/category/list");
     }
 
@@ -111,7 +114,7 @@ public class CategoriaResource {
 
     @GetMapping("/excluir/{id}")
     public ModelAndView deleteCategory(@PathVariable int id) {
-        service.delete(id);
+        if (!service.delete(id)) error = true;
         return new ModelAndView("redirect:/categorias/lista");
     }
 

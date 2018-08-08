@@ -18,6 +18,9 @@
                         + address.bairro + ' - CEP ' + address.cep + ' em ' + address.cidade.nome}">
                         </li>
                         <a th:text="#{edit}" th:href="@{|/clientes/enderecos/${client.id}/editar/${address.id}|}"> </a>
+                        <a th:text="#{delete}" href="#" th:onclick="'javascript:confirmAlert(\''+
+                                        #{confirm.msg} +'\', \'/clientes/enderecos/' + ${client.id} + '/excluir/' + ${address.id} +'\');'"
+                        ></a>
                     </div>
                 </ul>
             </div>
@@ -38,12 +41,12 @@
                                         <div class="col-md-8">
                                             <label for="address-street" th:text="#{address.street}"></label>
                                             <input class="form-control" id="address-street" type="text"
-                                                   th:field="*{logradouro}">
+                                                   th:field="*{logradouro}" required="">
                                         </div>
                                         <div class="col-md-4">
                                             <label for="address-number" th:text="#{address.number}"></label>
                                             <input class="form-control" id="address-number" type="number"
-                                                   th:field="*{numero}">
+                                                   th:field="*{numero}" required="">
                                         </div>
                                     </div>
                                 </div>
@@ -52,21 +55,21 @@
                                 <div class="col-md-12">
                                     <label for="address-complement" th:text="#{address.complement}"></label>
                                     <input class="form-control" id="address-complement" type="text"
-                                           th:field="*{complemento}">
+                                           th:field="*{complemento}" required="">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-12">
                                     <label for="address-neighborhood" th:text="#{address.neighborhood}"></label>
                                     <input class="form-control" id="address-neighborhood" type="text"
-                                           th:field="*{bairro}">
+                                           th:field="*{bairro}" required="">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-12">
                                     <label for="address-zipcode" th:text="#{address.zipcode}"></label>
                                     <input class="form-control" id="address-zipcode" type="text"
-                                           th:field="*{cep}">
+                                           th:field="*{cep}" required="">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -89,4 +92,39 @@
         </div>
     </div>
 </div>
+<th:block layout:fragment="js-view">
+    <script>
+        function confirmAlert(msg, redirectPage) {
+            swal({
+                title: "Atenção!",
+                text: msg,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Sim",
+                cancelButtonText: "Não",
+                allowOutsideClick: false
+            }).then(result => {
+                if (result.value) {
+                    window.location.href = redirectPage;
+                }
+            });
+        }
+
+        function errorAlert() {
+            swal({
+                title: "Erro!",
+                text: "Não foi possível excluir este endereço. Existe(m) pedido(s) relacionado(s) a ele.",
+                type: "error",
+                showCancelButton: false,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Ok",
+                allowOutsideClick: false
+            });
+        }
+
+        if ([[${error}]] == true)
+            errorAlert();
+    </script>
+</th:block>
 </html>
