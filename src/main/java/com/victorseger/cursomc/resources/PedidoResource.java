@@ -88,12 +88,6 @@ public class PedidoResource {
         return new ModelAndView("redirect:/pedidos/lista");
     }
 
-    @GetMapping("/excluir/{id}")
-    public ModelAndView deleteOrder(@PathVariable int id) {
-        service.delete(id);
-        return new ModelAndView("redirect:/pedidos/lista");
-    }
-
     @GetMapping("/editar/{id}")
     public ModelAndView updateOrder(@PathVariable int id, Model model) {
         model.addAttribute("order", service.find(id));

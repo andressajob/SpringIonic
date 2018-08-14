@@ -26,6 +26,8 @@ public class ProdutoResource {
     @Autowired
     private CategoriaService categoriaService;
 
+    private boolean error;
+
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<Produto> find(@PathVariable Integer id) {
         Produto obj = service.find(id);
@@ -51,6 +53,8 @@ public class ProdutoResource {
     @GetMapping("/lista")
     public ModelAndView listProducts(Model model) {
         model.addAttribute("products", service.findAll());
+        model.addAttribute("error", error);
+        error = false;
         return new ModelAndView("/product/list");
     }
 
@@ -72,7 +76,7 @@ public class ProdutoResource {
 
     @GetMapping("/excluir/{id}")
     public ModelAndView deleteProduct(@PathVariable int id) {
-        service.delete(id);
+        if (!service.delete(id)) error = true;
         return new ModelAndView("redirect:/produtos/lista");
     }
 

@@ -6,6 +6,7 @@ import com.victorseger.cursomc.repositories.CategoriaRepository;
 import com.victorseger.cursomc.repositories.ProdutoRepository;
 import com.victorseger.cursomc.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -51,9 +52,15 @@ public class ProdutoService {
         return repo.save(produto);
     }
 
-    public void delete(int id) {
-        if (repo.existsById(id))
-            repo.deleteById(id);
+    public boolean delete(int id) {
+        boolean flag;
+        try {
+            if (flag = repo.existsById(id))
+                repo.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            flag = false;
+        }
+        return flag;
     }
 
 

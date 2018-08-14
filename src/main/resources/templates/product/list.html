@@ -86,8 +86,22 @@
                 }
             });
         }
+
+        function errorAlert() {
+            swal({
+                title: "Erro!",
+                text: "Não foi possível excluir este produto. Existe(m) pedido(s) relacionado(s) a ele.",
+                type: "error",
+                showCancelButton: false,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Ok",
+                allowOutsideClick: false
+            });
+        }
+
+        if ([[${error}]] == true)
+            errorAlert();
     </script>
-    }
 </th:block>
 
 </html>

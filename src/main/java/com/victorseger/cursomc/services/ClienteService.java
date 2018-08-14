@@ -157,10 +157,9 @@ public class ClienteService {
     }
 
     public boolean deleteAddress(Integer id) {
-        boolean flag = true;
-        find(id);
+        boolean flag;
         try {
-            if (enderecoRepository.existsById(id))
+            if (flag = enderecoRepository.existsById(id))
                 enderecoRepository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
             flag = false;
@@ -168,6 +167,7 @@ public class ClienteService {
         return flag;
 
     }
+
 
    /* public URI uploadProfilePicture(MultipartFile multipartFile) {
         UserSS userSS = UserService.authenticated();

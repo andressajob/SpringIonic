@@ -47,9 +47,6 @@
                                 <td class="text-center">
                                     <a class="btn btn-primary" th:text="#{edit}"
                                        th:href="@{|editar/${order.id}|}"></a>
-                                    <button class="btn btn-danger" th:text="#{delete}" th:onclick="'javascript:confirmAlert(\''+
-                                        #{confirm.msg} +'\', \'/pedidos/excluir/'+ ${order.id} +'\');'"
-                                    ></button>
                                 </td>
                             </tr>
                             </tbody>
@@ -60,25 +57,4 @@
         </div>
     </div>
 </div>
-<th:block layout:fragment="js-view">
-    <script>
-        function confirmAlert(msg, redirectPage) {
-            swal({
-                title: "Atenção!",
-                text: msg,
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Sim",
-                cancelButtonText: "Não",
-                allowOutsideClick: false
-            }).then(result => {
-                if (result.value) {
-                    window.location.href = redirectPage;
-                }
-            });
-        }
-    </script>
-</th:block>
-
 </html>
