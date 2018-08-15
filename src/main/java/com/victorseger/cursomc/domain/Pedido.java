@@ -119,6 +119,13 @@ public class Pedido implements Serializable {
 
     @Override
     public String toString() {
+        return "Pedido{" +
+                "id=" + id +
+                '}';
+    }
+
+    /*    @Override
+    public String toString() {
         NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
         StringBuilder builder = new StringBuilder();
@@ -137,5 +144,5 @@ public class Pedido implements Serializable {
         builder.append(", Valor Total: ");
         builder.append(numberFormat.format(getValorTotal()));
         return builder.toString();
-    }
+    }*/
 }

@@ -1,6 +1,5 @@
 <html layout:decorate="~{/layouts/main}" xmlns:layout="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.w3.org/1999/xhtml">
-
 <div layout:fragment="content">
     <div class="content-wrapper">
         <div class="container-fluid">
@@ -11,7 +10,8 @@
                 </li>
                 <li class="breadcrumb-item active" th:text="#{item.new}"></li>
             </ol>
-            <div>
+            <span th:if="${#lists.isEmpty(items)}" th:text="#{listisempty}" class="badge"></span>
+            <div th:if="!${#lists.isEmpty(items)}">
                 <ul>
                     <div th:each="item: ${items}">
                         <li th:text="${'Produto:  ' + item.id.produto.nome + ' com desconto de ' + item.desconto + ', quantidade: '
@@ -79,23 +79,23 @@
     </div>
 </div>
 <th:block layout:fragment="js-view">
-<script>
-    function confirmAlert(msg, redirectPage) {
-        swal({
-            title: "Atenção!",
-            text: msg,
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Sim",
-            cancelButtonText: "Não",
-            allowOutsideClick: false
-        }).then(result => {
-            if (result.value) {
-                window.location.href = redirectPage;
-            }
-        });
-    }
-</script>
+    <script>
+        function confirmAlert(msg, redirectPage) {
+            swal({
+                title: "Atenção!",
+                text: msg,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Sim",
+                cancelButtonText: "Não",
+                allowOutsideClick: false
+            }).then(result => {
+                if (result.value) {
+                    window.location.href = redirectPage;
+                }
+            });
+        }
+    </script>
 </th:block>
 </html>

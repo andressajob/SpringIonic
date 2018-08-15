@@ -96,7 +96,7 @@ public class PedidoResource {
         return new ModelAndView("/order/form");
     }
 
-    @GetMapping("/itemPedidos")
+    @GetMapping("/enderecos")
     public @ResponseBody
     List<Endereco> findAllAddress(@RequestParam(value = "clientId", required = true) Integer clientId) {
         return clientService.findAllAddressByClientId(clientId);
@@ -104,9 +104,10 @@ public class PedidoResource {
 
     @GetMapping("/itens/{id}")
     public ModelAndView addItem(@PathVariable int id, Model model) {
+        Pedido pedido = service.getOne(id);
         ItemPedido itemPedido = new ItemPedido();
-        itemPedido.setPedido(service.find(id));
-        model.addAttribute("order", service.find(id));
+        itemPedido.setPedido(pedido);
+        model.addAttribute("order", pedido);
         model.addAttribute("action", "new");
         model.addAttribute("items", service.find(id).getItens());
         model.addAttribute("products", productService.findAll());

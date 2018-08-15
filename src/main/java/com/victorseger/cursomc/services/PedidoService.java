@@ -57,6 +57,10 @@ public class PedidoService {
                 "Objeto não encontrado! Id: " + ", Tipo: " + Pedido.class.getName()));
     }
 
+    public Pedido getOne(Integer id){
+        return repo.getOne(id);
+    }
+
     @Transactional
     public Pedido insert(Pedido pedido) {
         pedido.setId(null);
