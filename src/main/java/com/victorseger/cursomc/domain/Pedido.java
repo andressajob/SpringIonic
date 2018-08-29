@@ -33,7 +33,7 @@ public class Pedido implements Serializable {
     private Endereco enderecoEntrega;
 
 
-    @OneToMany(mappedBy = "id.pedido")
+    @OneToMany(mappedBy = "id.pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     //lista de itens associados ao pedido
     private Set<ItemPedido> itens = new HashSet<>();
 

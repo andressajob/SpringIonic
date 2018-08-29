@@ -73,33 +73,44 @@ public class PedidoResource {
         return new ModelAndView("/order/list");
     }
 
-    @GetMapping("/novo")
-    public ModelAndView newOrder(Model model) {
-        model.addAttribute("order", new Pedido());
-        model.addAttribute("action", "new");
-        model.addAttribute("clients", clientService.findAll());
-        return new ModelAndView("/order/form");
-    }
-
     @PostMapping("/salvar")
     public ModelAndView saveOrder(Pedido pedido) {
         if (pedido.getId() != null) service.update(pedido);
         else service.insert(pedido);
-        return new ModelAndView("redirect:/pedidos/lista");
+        return new ModelAndView("redirect:/pedidos/itens" + pedido.getId());
     }
 
     @GetMapping("/editar/{id}")
     public ModelAndView updateOrder(@PathVariable int id, Model model) {
-        model.addAttribute("order", service.find(id));
-        model.addAttribute("clients", clientService.findAll());
-        model.addAttribute("action", "edit");
-        return new ModelAndView("/order/form");
+        return new ModelAndView("redirect:/pedidos/itens/" + id);
+    }
+
+    @GetMapping("/cancelar/{id}")
+    public ModelAndView cancelOrder(@PathVariable int id, Model model) {
+        service.delete(id);
+        return new ModelAndView("redirect:/pedidos/lista/");
     }
 
     @GetMapping("/enderecos")
     public @ResponseBody
     List<Endereco> findAllAddress(@RequestParam(value = "clientId", required = true) Integer clientId) {
         return clientService.findAllAddressByClientId(clientId);
+    }
+
+    @GetMapping("/novo")
+    public ModelAndView newOrder(Model model) {
+        Pedido pedido = new Pedido();
+        ItemPedido itemPedido = new ItemPedido();
+        pedido.setCliente(clientService.find(1));
+        pedido.setEnderecoEntrega(clientService.find(1).getEnderecos().get(0));
+        pedido = service.insert(pedido);
+        itemPedido.setPedido(pedido);
+        model.addAttribute("order", pedido);
+        model.addAttribute("action", "new");
+        model.addAttribute("items", new HashSet<>());
+        model.addAttribute("products", productService.findAll());
+        model.addAttribute("newItem", itemPedido);
+        return new ModelAndView("/order/items/form");
     }
 
     @GetMapping("/itens/{id}")

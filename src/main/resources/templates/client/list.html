@@ -21,7 +21,7 @@
                         <a class="btn btn-success" th:text="#{client.new}"
                            href="/clientes/novo"></a>
                     </div>
-                    <div>
+                    <div class="text-center">
                         <span th:if="${#lists.isEmpty(clients)}" th:text="#{listisempty}" class="badge"> </span>
                     </div>
                     <div class="table-responsive" th:if="!${#lists.isEmpty(clients)}">

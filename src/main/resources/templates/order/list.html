@@ -21,7 +21,7 @@
                         <a class="btn btn-success" th:text="#{order.new}"
                            href="/pedidos/novo"></a>
                     </div>
-                    <div>
+                    <div class="text-center">
                         <span th:if="${#lists.isEmpty(orders)}" th:text="#{listisempty}" class="badge"> </span>
                     </div>
                     <div class="table-responsive" th:if="!${#lists.isEmpty(orders)}">
@@ -47,6 +47,9 @@
                                 <td class="text-center">
                                     <a class="btn btn-primary" th:text="#{edit}"
                                        th:href="@{|editar/${order.id}|}"></a>
+                                    <button class="btn btn-danger" th:text="#{cancel}"
+                                       th:onclick="'javascript:confirmAlert(\''+
+                                       #{cancel.msg} +'\', \'/pedidos/cancelar/' + ${order.id} +'\');'"></button>
                                 </td>
                             </tr>
                             </tbody>
@@ -57,4 +60,25 @@
         </div>
     </div>
 </div>
+
+<th:block layout:fragment="js-view">
+    <script>
+        function confirmAlert(msg, redirectPage) {
+            swal({
+                title: "Atenção!",
+                text: msg,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Sim",
+                cancelButtonText: "Não",
+                allowOutsideClick: false
+            }).then(result => {
+                if (result.value) {
+                    window.location.href = redirectPage;
+                }
+            });
+        }
+    </script>
+</th:block>
 </html>

@@ -21,7 +21,7 @@
                         <a class="btn btn-success" th:text="#{city.new}"
                            href="/cidades/novo"></a>
                     </div>
-                    <div>
+                    <div class="text-center">
                         <span th:if="${#lists.isEmpty(cities)}" th:text="#{listisempty}" class="badge"> </span>
                     </div>
                     <div class="table-responsive" th:if="!${#lists.isEmpty(cities)}">
