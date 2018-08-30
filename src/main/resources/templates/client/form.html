@@ -27,14 +27,14 @@
                                     <div class="col-md-12">
                                         <label for="client-name" th:text="#{client.name}"></label>
                                         <input class="form-control" id="client-name" type="text"
-                                               placeholder="Nome do cliente" th:field="*{nome}">
+                                               placeholder="Nome do cliente" th:field="*{nome}" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-12">
                                         <label for="client-phones" th:text="#{client.phone}"></label>
                                         <input class="form-control" id="client-phones" type="text"
-                                               placeholder="(XX) XXXX - XXXX" th:field="*{telefones}">
+                                               placeholder="(XX) XXXX - XXXX" th:field="*{telefones}" required>
                                     </div>
                                 </div>
                                 <div class="form-group" th:if="${action == 'edit'}">
@@ -46,14 +46,14 @@
                                     <div class="col-md-12">
                                         <label for="client-email" th:text="#{client.email}"></label>
                                         <input class="form-control" id="client-email" type="email"
-                                               placeholder="exemplo@exemplo.com" th:field="*{email}">
+                                               placeholder="exemplo@exemplo.com" th:field="*{email}" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-12">
                                         <label for="client-password" th:text="#{client.password}"></label>
                                         <input class="form-control" id="client-password" type="password"
-                                               placeholder="Senha do cliente" th:field="*{senha}">
+                                               placeholder="Senha do cliente" th:field="*{senha}" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -71,7 +71,7 @@
                                     <div class="col-md-12">
                                         <label for="client-cpf-cnpj" th:text="#{client.cpfcnpj}"></label>
                                         <input class="form-control" id="client-cpf-cnpj" type="text"
-                                               placeholder="CPF ou CNPJ do cliente" th:field="*{cpfOuCnpj}">
+                                               placeholder="CPF ou CNPJ do cliente" th:field="*{cpfOuCnpj}" required>
                                     </div>
                                 </div>
                             </div>

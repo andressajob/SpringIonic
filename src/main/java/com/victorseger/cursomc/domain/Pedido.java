@@ -19,6 +19,7 @@ public class Pedido implements Serializable {
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     private Date instante;
 
+    private Double valorTotal;
     //@JsonManagedReference - foi recomendada a remoção pois apresentou problemas durante a execução
     @OneToOne(cascade = CascadeType.ALL,mappedBy = "pedido")
     private Pagamento pagamento;
@@ -50,10 +51,13 @@ public class Pedido implements Serializable {
     public double getValorTotal() {
         double soma = 0;
         for (ItemPedido itemPedido : itens) {
-            soma = soma + itemPedido.getSubTotal();
+            soma += itemPedido.getPreco();
         }
-
         return soma;
+    }
+
+    public void setValorTotal(Double valorTotal) {
+        this.valorTotal = valorTotal;
     }
 
     public Integer getId() {

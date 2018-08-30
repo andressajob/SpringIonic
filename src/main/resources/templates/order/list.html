@@ -46,7 +46,7 @@
                                 <td th:text="${order.cliente.nome}"></td>
                                 <td class="text-center">
                                     <a class="btn btn-primary" th:text="#{edit}"
-                                       th:href="@{|editar/${order.id}|}"></a>
+                                       th:href="@{|/pedidos/editar/${order.id}|}"></a>
                                     <button class="btn btn-danger" th:text="#{cancel}"
                                        th:onclick="'javascript:confirmAlert(\''+
                                        #{cancel.msg} +'\', \'/pedidos/cancelar/' + ${order.id} +'\');'"></button>

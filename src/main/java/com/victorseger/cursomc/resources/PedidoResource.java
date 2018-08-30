@@ -7,8 +7,10 @@ import com.victorseger.cursomc.services.PedidoService;
 import com.victorseger.cursomc.services.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.util.MimeTypeUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -16,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.mail.FetchProfile;
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.HashSet;
 import java.util.List;
@@ -150,6 +153,25 @@ public class PedidoResource {
             service.insertItem(itemPedido);
         }
         return new ModelAndView("redirect:/pedidos/itens/" + itemPedido.getPedido().getId());
+    }
+
+    @RequestMapping(value = "preco/{product}", method = RequestMethod.GET, produces = {MimeTypeUtils.TEXT_PLAIN_VALUE})
+    public ResponseEntity<String> responseEntity(@PathVariable("product") Integer product) {
+        try {
+            return new ResponseEntity<String>(String.valueOf(productService.find(product).getPreco()) ,HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "total/{sell}/{total}", method = RequestMethod.GET, produces = {MimeTypeUtils.TEXT_PLAIN_VALUE})
+    public ResponseEntity<String> total(@PathVariable("total") Double total, @PathVariable("sell") Integer sell) {
+        try {
+            service.getOne(sell).setValorTotal(total);
+            return new ResponseEntity<String>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+        }
     }
 
 }
