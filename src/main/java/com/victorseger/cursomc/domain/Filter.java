@@ -1,11 +1,15 @@
 package com.victorseger.cursomc.domain;
 
-import java.util.Date;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 
 public class Filter {
     private String object;
-    private Date initialDate;
-    private Date finalDate;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate initialDate;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate finalDate;
 
     public Filter() {
     }
@@ -18,19 +22,27 @@ public class Filter {
         this.object = object;
     }
 
-    public Date getInitialDate() {
+    public LocalDate getInitialDate() {
         return initialDate;
     }
 
-    public void setInitialDate(Date initialDate) {
+    public void setInitialDate(LocalDate initialDate) {
         this.initialDate = initialDate;
     }
 
-    public Date getFinalDate() {
+    public LocalDate getFinalDate() {
         return finalDate;
     }
 
-    public void setFinalDate(Date finalDate) {
+    public void setFinalDate(LocalDate finalDate) {
         this.finalDate = finalDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Filter " +
+                "object '" + object + '\'' +
+                ", initialDate " + initialDate +
+                ", finalDate " + finalDate;
     }
 }

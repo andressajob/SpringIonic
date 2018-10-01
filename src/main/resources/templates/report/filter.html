@@ -10,7 +10,7 @@
                     <a href="/relatorios/filtros" th:text="#{reports}"></a>
                 </li>
             </ol>
-            <form method="post" action="@{relatorios/filtrar}" th:object="${filter}">
+            <form method="post" th:action="@{/relatorios/filtrar}" th:object="${filter}">
                 <div class="form-group">
                     <div class="col-md-12">
                         <div class="form-row">
@@ -24,16 +24,16 @@
                             </div>
                             <div class="col-md-3">
                                 <label for="initial-date" th:text="#{filter.initdate}"></label>
-                                <input id="initial-date" type="date" class="form_datetime" data-date-format="dd/mm/yyyy"
+                                <input id="initial-date" type="date" class="form-control"
                                        th:field="*{initialDate}">
                             </div>
                             <div class="col-md-3">
                                 <label for="final-date" th:text="#{filter.finaldate}"></label>
-                                <input id="final-date" type="date" class="form_datetime" data-date-format="dd/mm/yyyy"
+                                <input id="final-date" type="date" class="form-control"
                                        th:field="*{finalDate}">
                             </div>
                             <div class="col-md-3">
-                                <button class="btn btn-success" type="submit" th:text="#{filter}"></button>
+                                <button class="btn btn-success form-control" type="submit" th:text="#{filter}"></button>
                             </div>
                         </div>
                     </div>
@@ -44,9 +44,6 @@
 </div>
 <th:block layout:fragment="js-view">
     <script>
-        $(".form_datetime").datetimepicker({
-            format: "dd/mm/yyyy"
-        });
     function errorAlert() {
             swal({
                 title: "Erro!",
