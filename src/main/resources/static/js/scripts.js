@@ -20,4 +20,7 @@ $(document).ready(function(){
     if(get.match(/produtos/i)){
         $('#mainNav  li:eq(6)').addClass('active');
     }
+    if(get.match(/relatorios/i)){
+        $('#mainNav  li:eq(7)').addClass('active');
+    }
 });

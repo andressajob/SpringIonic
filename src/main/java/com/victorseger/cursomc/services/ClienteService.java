@@ -84,15 +84,15 @@ public class ClienteService {
         return repo.save(newCliente);
     }
 
-    public void delete(Integer id) {
-        find(id);
+    public boolean delete(Integer id) {
+        boolean flag;
         try {
-            repo.deleteById(id);
-            //capturando a exceção de integridade de dados violada e adicionando mensagem personalizada
+            if (flag = repo.existsById(id))
+                repo.deleteById(id);
         } catch (DataIntegrityViolationException e) {
-            throw new DataIntegrityException("Não é possível excluir cliente que possui pedidos");
+            flag = false;
         }
-
+        return flag;
     }
 
     public List<Cliente> findAll() {

@@ -1,0 +1,67 @@
+<html layout:decorate="~{/layouts/main}" xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+
+<div layout:fragment="content">
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/relatorios/filtros" th:text="#{reports}"></a>
+                </li>
+            </ol>
+            <form method="post" action="@{relatorios/filtrar}" th:object="${filter}">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <div class="form-row">
+                            <div class="col-md-3">
+                                <label for="filter-object" th:text="#{filter.object}"></label>
+                                <select class="form-control" id="filter-object" th:field="*{object}">
+                                    <option selected="" value="">--</option>
+                                    <option th:each="object : ${objects}" th:value="${object}"
+                                            th:text="${object}"></option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="initial-date" th:text="#{filter.initdate}"></label>
+                                <input id="initial-date" type="date" class="form_datetime" data-date-format="dd/mm/yyyy"
+                                       th:field="*{initialDate}">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="final-date" th:text="#{filter.finaldate}"></label>
+                                <input id="final-date" type="date" class="form_datetime" data-date-format="dd/mm/yyyy"
+                                       th:field="*{finalDate}">
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-success" type="submit" th:text="#{filter}"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<th:block layout:fragment="js-view">
+    <script>
+        $(".form_datetime").datetimepicker({
+            format: "dd/mm/yyyy"
+        });
+    function errorAlert() {
+            swal({
+                title: "Erro!",
+                text: "Não foi possível excluir este produto. Existe(m) pedido(s) relacionado(s) a ele.",
+                type: "error",
+                showCancelButton: false,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Ok",
+                allowOutsideClick: false
+            });
+        }
+
+        if ([[${error}]] == true)
+            errorAlert();
+    </script>
+</th:block>
+
+</html>

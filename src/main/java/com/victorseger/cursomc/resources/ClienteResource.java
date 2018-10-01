@@ -115,6 +115,8 @@ public class ClienteResource {
     @GetMapping("/lista")
     public ModelAndView listClients(Model model) {
         model.addAttribute("clients", service.findAll());
+        model.addAttribute("error", error);
+        error = false;
         return new ModelAndView("/client/list");
     }
 
@@ -138,7 +140,7 @@ public class ClienteResource {
 
     @GetMapping("/excluir/{id}")
     public ModelAndView deleteClient(@PathVariable int id) {
-        service.delete(id);
+        if (!service.delete(id)) error = true;
         return new ModelAndView("redirect:/clientes/lista");
     }
 

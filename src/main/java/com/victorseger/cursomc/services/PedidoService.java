@@ -171,4 +171,9 @@ public class PedidoService {
     public boolean existsItemPedido(Pedido pedido, Produto produto){
         return itemPedidoRepository.findById_PedidoAndId_Produto(pedido, produto) != null;
     }
+
+    public List<ItemPedido> topSellingProducts(){ return itemPedidoRepository.topSellingProducts();}
+
+    public List<Pedido> topOrders(){ return repo.ordersByTotalValor();}
+
 }

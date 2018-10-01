@@ -233,9 +233,21 @@ public class DBService {
         ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
         ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
 
+
         ped1.getItens().addAll(Arrays.asList(ip1,ip2));
         ped2.getItens().addAll(Arrays.asList(ip3));
 
+        double soma = 0;
+        for (ItemPedido itemPedido : ped1.getItens()) {
+             soma += itemPedido.getPreco();
+        }
+        ped1.setValorTotal(soma);
+        soma = 0;
+        for (ItemPedido itemPedido : ped2.getItens()) {
+            soma += itemPedido.getPreco();
+        }
+        ped2.setValorTotal(soma);
+        pedidoRepository.saveAll(Arrays.asList(ped1,ped2));
         p1.getItens().addAll(Arrays.asList(ip1));
         p2.getItens().addAll(Arrays.asList(ip3));
         p3.getItens().addAll(Arrays.asList(ip2));

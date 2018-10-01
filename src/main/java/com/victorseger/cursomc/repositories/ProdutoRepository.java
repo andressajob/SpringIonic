@@ -2,6 +2,7 @@ package com.victorseger.cursomc.repositories;
 
 import com.victorseger.cursomc.domain.Categoria;
 import com.victorseger.cursomc.domain.Produto;
+import org.hibernate.annotations.NamedNativeQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

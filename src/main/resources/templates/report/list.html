@@ -1,0 +1,89 @@
+<html layout:decorate="~{/layouts/main}" xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+
+<div layout:fragment="content">
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="/relatorios/lista" th:text="#{reports}"></a>
+                </li>
+            </ol>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="text-center">
+                        <span th:if="${#lists.isEmpty(products)}" th:text="#{listisempty}" class="badge"> </span>
+                    </div>
+                    <div class="table-responsive" th:if="!${#lists.isEmpty(products)}">
+                        <div class="card-header">
+                            <i class="fa fa-table"></i>
+                            <span th:text="#{product.topSelling}"></span>
+                        </div>
+                        <table class="table table-bordered" width="100%" cellspacing="0">
+                            <thead class="text-center">
+                            <tr>
+                                <th th:text="#{position}"></th>
+                                <th th:text="#{product.name}"></th>
+                                <th th:text="#{category}"></th>
+                                <th th:text="#{order.qtd}"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="product, row: ${products}">
+                                <td th:text="${row.index + 1}"></td>
+                                <td th:text="${product.id.produto.nome}"></td>
+                                <td>
+                                    <ul>
+                                        <li th:each="category: ${product.id.produto.categorias}" th:text="${category.nome}"></li>
+                                    </ul>
+                                </td>
+                                <td th:text="${product.quantidade}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!--<div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>-->
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="text-center">
+                        <span th:if="${#lists.isEmpty(orders)}" th:text="#{listisempty}" class="badge"> </span>
+                    </div>
+                    <div class="table-responsive" th:if="!${#lists.isEmpty(orders)}">
+                        <div class="card-header">
+                            <i class="fa fa-table"></i>
+                            <span th:text="#{order.topSelling}"></span>
+                        </div>
+                        <table class="table table-bordered" width="100%" cellspacing="0">
+                            <thead class="text-center">
+                            <tr>
+                                <th th:text="#{position}"></th>
+                                <th th:text="#{order.date}"></th>
+                                <th th:text="#{order.items}"></th>
+                                <th th:text="#{order.total}"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="order, row: ${orders}">
+                                <td th:text="${row.index + 1}"></td>
+                                <td th:text="${order.instante}"></td>
+                                <td>
+                                    <ul>
+                                        <li th:each="item: ${order.itens}" th:text="${item.id.produto.nome}"></li>
+                                    </ul>
+                                </td>
+                                <td th:text="${order.valorTotal}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!--<div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>-->
+            </div>
+        </div>
+    </div>
+</div>
+</html>

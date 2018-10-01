@@ -31,11 +31,11 @@
                         <td th:text="${#numbers.formatCurrency(item.desconto)}"></td>
                         <td class="itemTot" th:text="${#numbers.formatCurrency(item.preco)}"></td>
                         <td>
-                            <a th:text="#{edit}"
+                            <a th:text="#{edit}" class="btn btn-primary"
                                th:href="@{|/pedidos/itens/${order.id}/editar/${item.id.produto.id}|}"> </a>
-                            <a th:text="#{delete}" href="#" th:onclick="'javascript:confirmAlert(\''+
-                                        #{confirm.msg} +'\', \'/pedidos/itens/' + ${order.id} + '/excluir/' + ${item.id.produto.id} +'\');'"
-                            ></a>
+                            <button class="btn btn-danger" th:text="#{delete}" th:onclick="'javascript:confirmAlert(\''+
+                                        #{confirm.msg} +'\',\'/pedidos/itens/' + ${order.id} + '/excluir/' + ${item.id.produto.id} +'\');'"
+                            ></button>
                         </td>
                     </tr>
                     </tbody>
@@ -99,12 +99,12 @@
                                 </div>
                             </div>
                             <div class="form-group text-center">
-                                <button class="btn btn-default" type="submit" th:text="#{item.add}"></button>
-                                <a th:href="@{|/pedidos/itens/${order.id}|}" class="btn btn-primary"
+                                <button class="btn btn-primary" type="submit" th:text="#{item.add}"></button>
+                                <a th:href="@{|/pedidos/itens/${order.id}|}" class="btn btn-light"
                                    th:text="#{new}" id="addrow"></a>
                                 <button class="btn btn-danger" th:text="#{order.cancel}"
                                         th:onclick="'javascript:confirmAlert(\''+
-                                        #{cancel.msg} +'\', \'/pedidos/cancelar/' + ${order.id} +'\');'"></button>
+                                       #{cancel.msg} +'\', \'/pedidos/cancelar/' + ${order.id} +'\');'"></button>
                             </div>
                             <div class="form-group text-center">
                                 <a href="/pedidos/lista" class="btn btn-success" th:text="#{save}"></a>
