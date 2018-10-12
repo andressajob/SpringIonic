@@ -27,6 +27,8 @@ public class ProdutoResource {
     private CategoriaService categoriaService;
 
     private boolean error;
+    private boolean errorCategories;
+
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<Produto> find(@PathVariable Integer id) {
@@ -63,6 +65,10 @@ public class ProdutoResource {
         model.addAttribute("product", new ProdutoDTO());
         model.addAttribute("categories", categoriaService.findAll());
         model.addAttribute("action", "new");
+        model.addAttribute("error", error);
+        model.addAttribute("errorCategories", errorCategories);
+        error = false;
+        errorCategories = false;
         return new ModelAndView("/product/form");
     }
 
@@ -89,8 +95,17 @@ public class ProdutoResource {
                 }
             }
         }
-        service.save(produto);
-        return new ModelAndView("redirect:/produtos/lista");
+        Produto savedProduto = service.save(produto);
+        if (savedProduto != null && !savedProduto.getCategorias().isEmpty()){
+            return new ModelAndView("redirect:/produtos/lista");
+        } else {
+            if (savedProduto == null){
+                error = true;
+            } else if (savedProduto.getCategorias().isEmpty()){
+                errorCategories = true;
+            }
+            return new ModelAndView("redirect:/produtos/novo");
+        }
     }
 
 }

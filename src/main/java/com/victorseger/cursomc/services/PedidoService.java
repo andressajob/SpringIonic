@@ -17,10 +17,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.mail.FetchProfile;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 
 @Service
@@ -44,6 +44,9 @@ public class PedidoService {
     @Autowired
     private ClienteService clienteService;
 
+    @Autowired
+    private CategoriaService categoriaService;
+
 /*
     @Autowired
     private EmailService emailService;
@@ -57,7 +60,7 @@ public class PedidoService {
                 "Objeto não encontrado! Id: " + ", Tipo: " + Pedido.class.getName()));
     }
 
-    public Pedido getOne(Integer id){
+    public Pedido getOne(Integer id) {
         return repo.getOne(id);
     }
 
@@ -79,6 +82,13 @@ public class PedidoService {
             itemPedido.setPreco(itemPedido.getProduto().getPreco());
             itemPedido.setPedido(pedido);
         }*/
+        if (!pedido.getItens().isEmpty()) {
+            double soma = 0;
+            for (ItemPedido itemPedido : pedido.getItens()) {
+                soma += itemPedido.getPreco();
+            }
+            pedido.setValorTotal(soma);
+        }
         pedido = repo.save(pedido);
 
         //itemPedidoRepository.saveAll(pedido.getItens());
@@ -89,15 +99,15 @@ public class PedidoService {
 
     public Page<Pedido> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
         UserSS userSS = UserService.authenticated();
-        if(userSS == null) { // caso cliente não esteja authenticado, não pegará nenhum dado
+        if (userSS == null) { // caso cliente não esteja authenticado, não pegará nenhum dado
             throw new AuthorizationException("Acesso negado");
         }
-        PageRequest pageRequest = PageRequest.of(page,linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
         Cliente cliente = clienteService.find(userSS.getId());
-        return repo.findByCliente(cliente,pageRequest);
+        return repo.findByCliente(cliente, pageRequest);
     }
 
-    public boolean existsById (Integer id){
+    public boolean existsById(Integer id) {
         if (id != null && id > 0)
             return repo.existsById(id);
         return false;
@@ -119,7 +129,7 @@ public class PedidoService {
 
     public Pedido update(Pedido pedido) {
         Pedido newPedido = find(pedido.getId());
-        updateData(newPedido,pedido);
+        updateData(newPedido, pedido);
         return repo.save(newPedido);
     }
 
@@ -128,11 +138,11 @@ public class PedidoService {
         newPedido.setEnderecoEntrega(pedido.getEnderecoEntrega());
     }
 
-    public ItemPedido findItemById (Pedido pedido, Produto produto){
+    public ItemPedido findItemById(Pedido pedido, Produto produto) {
         return itemPedidoRepository.findById_PedidoAndId_Produto(pedido, produto);
     }
 
-    public void insertItem (ItemPedido itemPedido){
+    public void insertItem(ItemPedido itemPedido) {
         ItemPedidoPK pk = new ItemPedidoPK();
         Pedido pedido = repo.getOne(itemPedido.getPedido().getId());
         pk.setPedido(itemPedido.getPedido());
@@ -141,13 +151,18 @@ public class PedidoService {
         if (itemPedido.getDesconto() == null)
             itemPedido.setDesconto(0.0);
         itemPedido = itemPedidoRepository.save(itemPedido);
+        double soma = 0;
+        for (ItemPedido itemPedidos : pedido.getItens()) {
+            soma += itemPedidos.getPreco();
+        }
+        pedido.setValorTotal(soma);
         pedido.getItens().add(itemPedido);
         repo.save(pedido);
     }
 
-    public void updateItem (ItemPedido itemPedido){
+    public void updateItem(ItemPedido itemPedido) {
         ItemPedido newItem = itemPedidoRepository.findById_PedidoAndId_Produto(itemPedido.getPedido(), itemPedido.getProduto());
-        updateDataItem(newItem,itemPedido);
+        updateDataItem(newItem, itemPedido);
         itemPedidoRepository.save(newItem);
     }
 
@@ -164,16 +179,43 @@ public class PedidoService {
         newItem.setQuantidade(itemPedido.getQuantidade());
     }
 
-    public void deleteItem(ItemPedido itemPedido){
+    public void deleteItem(ItemPedido itemPedido) {
         itemPedidoRepository.delete(itemPedidoRepository.findById_PedidoAndId_Produto(itemPedido.getPedido(), itemPedido.getProduto()));
     }
 
-    public boolean existsItemPedido(Pedido pedido, Produto produto){
+    public boolean existsItemPedido(Pedido pedido, Produto produto) {
         return itemPedidoRepository.findById_PedidoAndId_Produto(pedido, produto) != null;
     }
 
-    public List<ItemPedido> topSellingProducts(){ return itemPedidoRepository.topSellingProducts();}
+    public List<ItemPedido> topSellingProducts() {
+        return itemPedidoRepository.topSellingProducts();
+    }
 
-    public List<Pedido> topOrders(){ return repo.ordersByTotalValor();}
+    public List<Pedido> topOrders() {
+        return repo.ordersByTotalValor();
+    }
 
+    public List<Pedido> filterOrders(LocalDate initDate, LocalDate finalDate) {
+        return repo.filterOrders(initDate, finalDate);
+    }
+
+    public List<ItemPedido> filterProducts(LocalDate initialDate, LocalDate finalDate) {
+        return itemPedidoRepository.filterProducts(initialDate, finalDate);
+    }
+
+    public Integer[][] topSellingCategories() {
+        return itemPedidoRepository.topSellingCategories();
+    }
+
+    public Map<Categoria, Integer> transformMatrix(Integer[][] matrix) {
+        Map<Categoria, Integer> map = new LinkedHashMap<>();
+        for (int i = 0; i < matrix.length; i++) {
+            map.put(categoriaService.find(matrix[i][0]), matrix[i][1]);
+        }
+        return map;
+    }
+
+    public Integer[][] filterCategories(LocalDate initDate, LocalDate finalDate) {
+        return itemPedidoRepository.filterCategories(initDate, finalDate);
+    }
 }

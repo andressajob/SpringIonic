@@ -1,3 +1,4 @@
+/*
 package com.victorseger.cursomc.services;
 
 import com.victorseger.cursomc.domain.Cliente;
@@ -23,3 +24,4 @@ public interface EmailService {
 
 
 }
+*/

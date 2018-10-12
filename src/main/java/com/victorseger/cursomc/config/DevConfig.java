@@ -1,8 +1,6 @@
 package com.victorseger.cursomc.config;
 
 import com.victorseger.cursomc.services.DBService;
-import com.victorseger.cursomc.services.EmailService;
-import com.victorseger.cursomc.services.SmtpEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -38,9 +36,11 @@ public class DevConfig {
         return true;
     }
     //método para instanciar o smtpemailservice que utiliza o servidor do google como provedor de email
+/*
    @Bean
     public EmailService emailService() {
         return new SmtpEmailService();
     }
+*/
 
 }

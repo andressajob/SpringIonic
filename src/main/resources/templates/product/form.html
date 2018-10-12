@@ -28,13 +28,14 @@
                                             <label for="product-name" th:text="#{product.name}"></label>
                                             <input class="form-control" id="product-name" type="text"
                                                    aria-describedby="nameHelp"
-                                                   placeholder="Produto novo aqui" th:field="*{nome}">
+                                                   placeholder="Produto novo aqui" th:field="*{nome}" required>
                                         </div>
                                         <div class="col-md-4">
                                             <label for="product-price" th:text="#{product.price}"></label>
                                             <input class="form-control" id="product-price" type="number" min="0.01"
                                                    step="0.01"
-                                                   aria-describedby="nameHelp" placeholder="0.00" th:field="*{preco}">
+                                                   aria-describedby="nameHelp" placeholder="0.00" th:field="*{preco}"
+                                                   required>
                                         </div>
                                     </div>
                                 </div>
@@ -43,8 +44,10 @@
                                 <span class="text-center" th:text="#{categories}"></span>
                                 <div class="form-row">
                                     <div class="col-md-3 text-center" th:each="category: ${categories}">
-                                        <input th:if="${action == 'edit'}" type="checkbox" name="categories" th:field="*{categorias}" th:value="${category.id}"/>
-                                        <input th:if="${action == 'new'}" type="checkbox" name="categories" th:value="${category.id}"/>
+                                        <input th:if="${action == 'edit'}" type="checkbox" name="categories"
+                                               th:field="*{categorias}" th:value="${category.id}"/>
+                                        <input th:if="${action == 'new'}" type="checkbox" name="categories"
+                                               th:value="${category.id}"/>
                                         <label th:text="${category.nome}"></label>
                                     </div>
                                 </div>
@@ -59,4 +62,37 @@
         </div>
     </div>
 </div>
+<th:block layout:fragment="js-view">
+    <script>
+        function errorNameAlert() {
+            swal({
+                title: "Erro!",
+                text: "Não foi possível incluir este produto. Existe um produto com o mesmo nome.",
+                type: "error",
+                showCancelButton: false,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Ok",
+                allowOutsideClick: false
+            });
+        }
+
+        if ([[${error}]] == true)
+            errorNameAlert();
+
+        function errorCategoryAlert() {
+            swal({
+                title: "Erro!",
+                text: "Não foi possível incluir este produto. É necessário relacionar ao menos uma categoria a ele.",
+                type: "error",
+                showCancelButton: false,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Ok",
+                allowOutsideClick: false
+            });
+        }
+
+        if ([[${errorCategories}]] == true)
+            errorCategoryAlert();
+    </script>
+</th:block>
 </html>

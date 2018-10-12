@@ -7,7 +7,7 @@
             <!-- Breadcrumbs-->
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="/categorias/lista" th:text="#{order}"></a>
+                    <a href="/pedidos/lista" th:text="#{order}"></a>
                 </li>
                 <li class="breadcrumb-item active" th:text="#{list}"></li>
             </ol>
@@ -30,6 +30,7 @@
                             <tr>
                                 <th th:text="#{order.date}"></th>
                                 <th th:text="#{order.client}"></th>
+                                <th th:text="#{order.total}"></th>
                                 <th th:text="#{options}"></th>
                             </tr>
                             </thead>
@@ -37,13 +38,15 @@
                             <tr>
                                 <th th:text="#{order.date}"></th>
                                 <th th:text="#{order.client}"></th>
+                                <th th:text="#{order.total}"></th>
                                 <th th:text="#{options}"></th>
                             </tr>
                             </tfoot>
                             <tbody>
                             <tr th:each="order: ${orders}">
-                                <td th:text="${#dates.format(order.instante, 'dd/MM/yyyy HH:mm')}"></td>
+                                <td th:text="${#dates.format(order.instante, 'yyyy/MM/dd HH:mm')}"></td>
                                 <td th:text="${order.cliente.nome}"></td>
+                                <td th:text="${#numbers.formatCurrency(order.valorTotal)}"></td>
                                 <td class="text-center">
                                     <a class="btn btn-primary" th:text="#{edit}"
                                        th:href="@{|/pedidos/editar/${order.id}|}"></a>
@@ -79,6 +82,21 @@
                 }
             });
         }
+
+        function savedAlert() {
+            swal({
+                title: "Sucesso!",
+                text: "Pedido salvo.",
+                type: "success",
+                showCancelButton: false,
+                confirmButtonColor: "#5cdd7c",
+                confirmButtonText: "Ok",
+                allowOutsideClick: false
+            });
+        }
+
+        if ([[${saved}]] == true)
+            savedAlert();
     </script>
 </th:block>
 </html>

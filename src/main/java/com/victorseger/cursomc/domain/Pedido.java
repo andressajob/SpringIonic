@@ -14,7 +14,7 @@ public class Pedido implements Serializable {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Integer id;
+    private Integer idPedido;
 
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     private Date instante;
@@ -42,7 +42,7 @@ public class Pedido implements Serializable {
     }
 
     public Pedido(Integer id, Date instante, Cliente cliente, Endereco enderecoEntrega) {
-        this.id = id;
+        this.idPedido = id;
         this.instante = instante;
         this.cliente = cliente;
         this.enderecoEntrega = enderecoEntrega;
@@ -61,11 +61,11 @@ public class Pedido implements Serializable {
     }
 
     public Integer getId() {
-        return id;
+        return idPedido;
     }
 
     public void setId(Integer id) {
-        this.id = id;
+        this.idPedido = id;
     }
 
     public Date getInstante() {
@@ -113,18 +113,18 @@ public class Pedido implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Pedido pedido = (Pedido) o;
-        return Objects.equals(id, pedido.id);
+        return Objects.equals(idPedido, pedido.idPedido);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(idPedido);
     }
 
     @Override
     public String toString() {
         return "Pedido{" +
-                "id=" + id +
+                "id=" + idPedido +
                 '}';
     }
 

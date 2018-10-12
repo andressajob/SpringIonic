@@ -31,11 +31,11 @@
                         <td th:text="${#numbers.formatCurrency(item.desconto)}"></td>
                         <td class="itemTot" th:text="${#numbers.formatCurrency(item.preco)}"></td>
                         <td>
-                            <a th:text="#{edit}" class="btn btn-primary"
+                            <a th:text="#{edit}"
                                th:href="@{|/pedidos/itens/${order.id}/editar/${item.id.produto.id}|}"> </a>
-                            <button class="btn btn-danger" th:text="#{delete}" th:onclick="'javascript:confirmAlert(\''+
-                                        #{confirm.msg} +'\',\'/pedidos/itens/' + ${order.id} + '/excluir/' + ${item.id.produto.id} +'\');'"
-                            ></button>
+                            <a th:text="#{delete}" href="#" th:onclick="'javascript:confirmAlert(\''+
+                                        #{confirm.msg} +'\', \'/pedidos/itens/' + ${order.id} + '/excluir/' + ${item.id.produto.id} +'\');'"
+                            ></a>
                         </td>
                     </tr>
                     </tbody>
@@ -99,15 +99,15 @@
                                 </div>
                             </div>
                             <div class="form-group text-center">
-                                <button class="btn btn-primary" type="submit" th:text="#{item.add}"></button>
-                                <a th:href="@{|/pedidos/itens/${order.id}|}" class="btn btn-light"
+                                <button class="btn btn-default" type="submit" th:text="#{item.add}"></button>
+                                <a th:href="@{|/pedidos/itens/${order.id}|}" class="btn btn-primary"
                                    th:text="#{new}" id="addrow"></a>
                                 <button class="btn btn-danger" th:text="#{order.cancel}"
                                         th:onclick="'javascript:confirmAlert(\''+
-                                       #{cancel.msg} +'\', \'/pedidos/cancelar/' + ${order.id} +'\');'"></button>
+                                        #{cancel.msg} +'\', \'/pedidos/cancelar/' + ${order.id} +'\');'"></button>
                             </div>
                             <div class="form-group text-center">
-                                <a href="/pedidos/lista" class="btn btn-success" th:text="#{save}"></a>
+                                <a th:href="@{|/pedidos/valida/${order.id}|}" class="btn btn-success" th:text="#{save}"></a>
                             </div>
                         </div>
                     </form>
@@ -127,13 +127,29 @@
                 confirmButtonColor: "#DD6B55",
                 confirmButtonText: "Sim",
                 cancelButtonText: "Não",
-                  allowOutsideClick: false
+                allowOutsideClick: false
             }).then(result => {
                 if (result.value) {
+                    document.getElementById("qtdSelling").required = false;
                     window.location.href = redirectPage;
                 }
             });
         }
+
+        function errorAlert() {
+            swal({
+                title: "Erro!",
+                text: "Não foi possível salvar este pedido. Não existe nenhum item relacionado a ele.",
+                type: "error",
+                showCancelButton: false,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Ok",
+                allowOutsideClick: false
+            });
+        }
+
+        if ([[${error}]] == true)
+            errorAlert();
     </script>
 </th:block>
 </html>

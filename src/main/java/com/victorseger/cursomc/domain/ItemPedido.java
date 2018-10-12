@@ -91,8 +91,8 @@ public class ItemPedido implements Serializable {
         return preco;
     }
 
-    public void setPreco(Double preco) {
-        this.preco = preco;
+    public void setPreco(Double valor) {
+        this.preco = valor;
     }
 
     @Override
@@ -113,14 +113,4 @@ public class ItemPedido implements Serializable {
         NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
         return getProduto().getNome() + ", Qtd: " + getQuantidade() + ", Preço Unitário: " + numberFormat.format(getPreco()) + ", Subtotal: " + numberFormat.format(getSubTotal()) + "\n";
     }*/
-
-    @Override
-    public String toString() {
-        return "ItemPedido{" +
-                "idPedido=" + id.getPedido() +
-                ", desconto=" + desconto +
-                ", quantidade=" + quantidade +
-                ", preco=" + preco +
-                '}';
-    }
 }

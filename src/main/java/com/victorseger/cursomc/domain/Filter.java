@@ -12,6 +12,8 @@ public class Filter {
     private LocalDate finalDate;
 
     public Filter() {
+        this.initialDate = LocalDate.now().minusMonths(1);
+        this.finalDate = LocalDate.now();
     }
 
     public String getObject() {

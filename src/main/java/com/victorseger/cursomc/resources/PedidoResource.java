@@ -38,6 +38,8 @@ public class PedidoResource {
     @Autowired
     private ProdutoService productService;
 
+    private boolean error;
+    private boolean saved;
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<Pedido> find(@PathVariable Integer id) {
@@ -72,6 +74,13 @@ public class PedidoResource {
 
     @GetMapping("/lista")
     public ModelAndView listOrders(Model model) {
+        for (Pedido order : service.findAll()) {
+            if (order.getItens().isEmpty()) {
+                service.delete(order.getId());
+            }
+        }
+        model.addAttribute("saved", saved);
+        saved = false;
         model.addAttribute("orders", service.findAll());
         return new ModelAndView("/order/list");
     }
@@ -108,6 +117,8 @@ public class PedidoResource {
         pedido.setEnderecoEntrega(clientService.find(1).getEnderecos().get(0));
         pedido = service.insert(pedido);
         itemPedido.setPedido(pedido);
+        model.addAttribute("error", error);
+        error = false;
         model.addAttribute("order", pedido);
         model.addAttribute("action", "new");
         model.addAttribute("items", new HashSet<>());
@@ -118,10 +129,9 @@ public class PedidoResource {
 
     @GetMapping("/itens/{id}")
     public ModelAndView addItem(@PathVariable int id, Model model) {
-        Pedido pedido = service.getOne(id);
         ItemPedido itemPedido = new ItemPedido();
-        itemPedido.setPedido(pedido);
-        model.addAttribute("order", pedido);
+        itemPedido.setPedido(service.find(id));
+        model.addAttribute("order", service.find(id));
         model.addAttribute("action", "new");
         model.addAttribute("items", service.find(id).getItens());
         model.addAttribute("products", productService.findAll());
@@ -141,24 +151,36 @@ public class PedidoResource {
 
     @GetMapping("/itens/{id}/excluir/{idItem}")
     public ModelAndView deleteItem(@PathVariable int id, @PathVariable int idItem, Model model) {
-        service.deleteItem(service.findItemById(service.find(id),productService.find(idItem)));
+        service.deleteItem(service.findItemById(service.find(id), productService.find(idItem)));
         return new ModelAndView("redirect:/pedidos/itens/" + id);
     }
 
     @PostMapping("/salvarItem")
     public ModelAndView saveItem(@ModelAttribute("newItem") ItemPedido itemPedido) {
-        if (service.existsItemPedido(itemPedido.getPedido(), itemPedido.getProduto())){
+        if (service.existsItemPedido(itemPedido.getPedido(), itemPedido.getProduto())) {
             service.updateItem(itemPedido);
-        } else{
+        } else {
             service.insertItem(itemPedido);
         }
         return new ModelAndView("redirect:/pedidos/itens/" + itemPedido.getPedido().getId());
     }
 
+    @GetMapping("/valida/{id}")
+    public ModelAndView validateOrder(@PathVariable int id) {
+        if (service.find(id).getItens().isEmpty()) {
+            error = true;
+            service.delete(id);
+            return new ModelAndView("redirect:/pedidos/novo/");
+        } else {
+            saved = true;
+            return new ModelAndView("redirect:/pedidos/lista/");
+        }
+    }
+
     @RequestMapping(value = "preco/{product}", method = RequestMethod.GET, produces = {MimeTypeUtils.TEXT_PLAIN_VALUE})
     public ResponseEntity<String> responseEntity(@PathVariable("product") Integer product) {
         try {
-            return new ResponseEntity<String>(String.valueOf(productService.find(product).getPreco()) ,HttpStatus.OK);
+            return new ResponseEntity<String>(String.valueOf(productService.find(product).getPreco()), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
         }

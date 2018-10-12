@@ -1,7 +1,10 @@
 package com.victorseger.cursomc.resources;
 
 import com.victorseger.cursomc.domain.Filter;
+import com.victorseger.cursomc.domain.Produto;
+import com.victorseger.cursomc.services.CategoriaService;
 import com.victorseger.cursomc.services.PedidoService;
+import com.victorseger.cursomc.services.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 @RestController
 @RequestMapping(value = "/relatorios")
 public class RelatorioResource {
@@ -17,10 +23,13 @@ public class RelatorioResource {
     @Autowired
     private PedidoService pedidoService;
 
+    private Filter filter = new Filter();
+
     @GetMapping("/lista")
     public ModelAndView listReports(Model model) {
         model.addAttribute("products", pedidoService.topSellingProducts());
         model.addAttribute("orders", pedidoService.topOrders());
+        model.addAttribute("categories", pedidoService.transformMatrix(pedidoService.topSellingCategories()));
         return new ModelAndView("/report/list");
     }
 
@@ -28,14 +37,24 @@ public class RelatorioResource {
     public ModelAndView formFilterReports(Model model) {
         String[] objects = {"Produto", "Pedido", "Categoria"};
         model.addAttribute("objects", objects);
-        model.addAttribute("filter", new Filter());
+        model.addAttribute("filter", filter);
         return new ModelAndView("/report/filter");
     }
 
     @PostMapping("/filtrar")
-    public void filterReports(Filter filter){
-        System.out.println(filter.toString());
-        System.out.println(filter.getFinalDate().compareTo(filter.getInitialDate()));
+    public ModelAndView filterReports(Filter filter, Model model){
+        if(filter == null)
+            filter = new Filter();
+        String[] objects = {"Produto", "Pedido", "Categoria"};
+        model.addAttribute("objects", objects);
+        model.addAttribute("filter", filter);
+        if ("Pedido".equals(filter.getObject())){
+            model.addAttribute("orders", pedidoService.filterOrders(filter.getInitialDate(), filter.getFinalDate()));
+        } else if ("Categoria".equals(filter.getObject())){
+            model.addAttribute("categories", pedidoService.transformMatrix(pedidoService.filterCategories(filter.getInitialDate(), filter.getFinalDate())));
+        } else if ("Produto".equals(filter.getObject())){
+            model.addAttribute("products", pedidoService.filterProducts(filter.getInitialDate(), filter.getFinalDate()));
+        }
+        return new ModelAndView("/report/filter");
     }
-
 }

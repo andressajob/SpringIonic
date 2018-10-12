@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,6 +50,9 @@ public class ProdutoService {
     }
 
     public Produto save(Produto produto) {
+        if (repo.existsByNomeIgnoreCase(produto.getNome())){
+            return null;
+        }
         return repo.save(produto);
     }
 
@@ -62,6 +66,5 @@ public class ProdutoService {
         }
         return flag;
     }
-
 
 }

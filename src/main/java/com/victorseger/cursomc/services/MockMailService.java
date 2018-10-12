@@ -1,3 +1,4 @@
+/*
 package com.victorseger.cursomc.services;
 
 import org.slf4j.Logger;
@@ -25,3 +26,4 @@ public class MockMailService extends AbstractMailService{
         LOGGER.info("Email enviado!");
     }
 }
+*/

@@ -21,6 +21,12 @@ $(document).ready(function(){
         $('#mainNav  li:eq(6)').addClass('active');
     }
     if(get.match(/relatorios/i)){
-        $('#mainNav  li:eq(7)').addClass('active');
+        $('#mainNav  li:eq(7) ul').addClass('show');
+    }
+    if(get.match('/relatorios/filtros') || get.match('/relatorios/filtrar')){
+        $('#mainNav  li:eq(9)').addClass('active');
+    }
+    if(get.match('/relatorios/lista')){
+        $('#mainNav  li:eq(8)').addClass('active');
     }
 });

@@ -44,7 +44,6 @@
                         </table>
                     </div>
                 </div>
-                <!--<div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>-->
             </div>
 
             <div class="card mb-3">
@@ -69,7 +68,7 @@
                             <tbody>
                             <tr th:each="order, row: ${orders}">
                                 <td th:text="${row.index + 1}"></td>
-                                <td th:text="${order.instante}"></td>
+                                <td th:text="${#dates.format(order.instante, 'dd/MM/yyyy HH:mm')}"></td>
                                 <td>
                                     <ul>
                                         <li th:each="item: ${order.itens}" th:text="${item.id.produto.nome}"></li>
@@ -81,7 +80,35 @@
                         </table>
                     </div>
                 </div>
-                <!--<div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>-->
+            </div>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="text-center">
+                        <span th:if="${#lists.isEmpty(categories)}" th:text="#{listisempty}" class="badge"> </span>
+                    </div>
+                    <div class="table-responsive" th:if="!${#lists.isEmpty(categories)}">
+                        <div class="card-header">
+                            <i class="fa fa-table"></i>
+                            <span th:text="#{category.topSelling}"></span>
+                        </div>
+                        <table class="table table-bordered" width="100%" cellspacing="0">
+                            <thead class="text-center">
+                            <tr>
+                                <th th:text="#{position}"></th>
+                                <th th:text="#{category.name}"></th>
+                                <th th:text="#{order.qtd}"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="category, row: ${categories.keySet()}">
+                                <td th:text="${row.index + 1}"></td>
+                                <td th:text="${category.nome}"></td>
+                                <td th:text="${categories.get(category)}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
