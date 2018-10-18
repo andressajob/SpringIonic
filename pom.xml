@@ -93,41 +93,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-
-		<dependency>
-			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt</artifactId>
-			<version>0.7.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
-			<version>2.0.2.RELEASE</version>
-		</dependency>
-
-
-<!--
-		&lt;!&ndash;Dependência que conecta com o amazon s3&ndash;&gt;
-		<dependency>
-			<groupId>com.amazonaws</groupId>
-			<artifactId>aws-java-sdk</artifactId>
-			<version>LATEST</version>
-		</dependency>
-		&lt;!&ndash;Dependência para extrair tipo dos arquivos de forma simplificada&ndash;&gt;
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>LATEST</version>
-		</dependency>
-		&lt;!&ndash;dependência para ajuste de tamanho de imagem&ndash;&gt;
-		<dependency>
-			<groupId>org.imgscalr</groupId>
-			<artifactId>imgscalr-lib</artifactId>
-			<version>4.2</version>
-		</dependency>
--->
-
-
 	</dependencies>
 
 	<build>

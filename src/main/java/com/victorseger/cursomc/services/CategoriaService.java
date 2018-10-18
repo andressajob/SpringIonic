@@ -1,9 +1,7 @@
 package com.victorseger.cursomc.services;
 
 import com.victorseger.cursomc.domain.Categoria;
-import com.victorseger.cursomc.dto.CategoriaDTO;
 import com.victorseger.cursomc.repositories.CategoriaRepository;
-import com.victorseger.cursomc.services.exceptions.DataIntegrityException;
 import com.victorseger.cursomc.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -72,10 +70,6 @@ public class CategoriaService {
         if (id != null && id > 0)
             return repo.existsById(id);
         return false;
-    }
-
-    public Categoria fromDTO(CategoriaDTO categoriaDTO) {
-        return new Categoria(categoriaDTO.getId(), categoriaDTO.getNome());
     }
 
     private void updateData(Categoria newCategoria, Categoria categoria) {

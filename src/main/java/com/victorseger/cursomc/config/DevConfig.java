@@ -35,12 +35,5 @@ public class DevConfig {
         dbService.instantiateDataBase();
         return true;
     }
-    //método para instanciar o smtpemailservice que utiliza o servidor do google como provedor de email
-/*
-   @Bean
-    public EmailService emailService() {
-        return new SmtpEmailService();
-    }
-*/
 
 }

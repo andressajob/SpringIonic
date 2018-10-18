@@ -15423,7 +15423,7 @@ module.exports = helpers.extend({
 	acquireContext: function() {},
 
 	/**
-	 * Called at chart destruction time, releases any resources associated to the context
+	 * Called at chart destruction time, releases any controller associated to the context
 	 * previously returned by the acquireContext() method.
 	 * @param {CanvasRenderingContext2D} context - The context2d instance
 	 * @returns {Boolean} true if the method succeeded, else false

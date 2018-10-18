@@ -1,18 +1,41 @@
 package com.victorseger.cursomc.services;
 
-import com.victorseger.cursomc.security.UserSS;
-import org.springframework.security.core.context.SecurityContextHolder;
+import com.victorseger.cursomc.domain.User;
+import com.victorseger.cursomc.repositories.UserRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService {
-    //função que retorna o usuário logado
-    public static UserSS authenticated() {
-        try {
-            return (UserSS) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        } catch (Exception e) {
-            return null;
-        }
+
+    private final UserRepository userRepository;
+    private final RoleService roleService;
+
+    public UserService(UserRepository userRepository, RoleService roleService) {
+        this.userRepository = userRepository;
+        this.roleService = roleService;
     }
 
+    public User save(User user) {
+
+        return userRepository.save(user);
+
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    public User getOne(Long id) {
+        if (id != null && userRepository.existsById(id))
+            return userRepository.getOne(id);
+        return null;
+    }
+
+    public boolean existsById(Long id) {
+        if (id != null)
+            return userRepository.existsById(id);
+        return false;
+    }
 }

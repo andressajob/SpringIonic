@@ -27,10 +27,4 @@ public class TestConfig {
         return true;
     }
 
-    //método para instanciar mail service mock
-/*    @Bean
-    public EmailService emailService() {
-        return new MockMailService();
-    }*/
-
 }

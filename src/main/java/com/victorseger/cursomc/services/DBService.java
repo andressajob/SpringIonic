@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Service
@@ -47,8 +49,29 @@ public class DBService {
     @Autowired
     private ItemPedidoRepository itemPedidoRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
 
     public void instantiateDataBase() throws ParseException {
+        Role role = new Role();
+        role.setRole("ROLE_ADMIN");
+        roleRepository.save(role);
+        Role rol2 = new Role();
+        rol2.setRole("ROLE_USER");
+        roleRepository.save(rol2);
+
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
+        User admin = new User("Administrador","admin","vicktor.junior@gmail.com",bCryptPasswordEncoder.encode("admin"),true, roles);
+        userRepository.save(admin);
+        roles.clear();
+        roles.add(rol2);
+        User user = new User("Vendedor","user","vicktor.junior@gmail.com",bCryptPasswordEncoder.encode("user"),true, roles);
+        userRepository.save(user);
 
         Categoria cat1 = new Categoria(null, "informática");
         Categoria cat2 = new Categoria(null, "escritório");
@@ -253,7 +276,6 @@ public class DBService {
         p3.getItens().addAll(Arrays.asList(ip2));
 
         itemPedidoRepository.saveAll(Arrays.asList(ip1,ip2,ip3));
-
     }
 
 }

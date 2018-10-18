@@ -1,0 +1,27 @@
+<html layout:decorate="~{/layouts/main-login}" xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<div layout:fragment="content">
+    <div class="container">
+        <div class="card card-login mx-auto mt-5">
+            <div class="card-header" th:text="#{login.info}"></div>
+            <div class="card-body">
+                <div th:if="${param.error}" class="alert alert-danger login"
+                     th:text="#{login.error}"></div>
+                <div th:if="${param.logout}" class="alert alert-success login"
+                     th:text="#{login.disconnect}"></div>
+                <form id="form-login" th:action="@{/login}" method="post">
+                    <div class="form-group">
+                        <label for="username" th:text="#{login.user}"></label>
+                        <input class="form-control" id="username" name="username" placeholder="Entre com seu login" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" th:text="#{login.password}"></label>
+                        <input class="form-control" id="password" name="password" type="password" placeholder="Senha" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block" th:text="#{login.enter}"></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
