@@ -4,25 +4,15 @@ import com.victorseger.cursomc.domain.Cliente;
 import com.victorseger.cursomc.domain.Endereco;
 import com.victorseger.cursomc.domain.enums.Perfil;
 import com.victorseger.cursomc.domain.enums.TipoCliente;
-import com.victorseger.cursomc.dto.ClienteDTO;
-import com.victorseger.cursomc.dto.ClienteNewDTO;
 import com.victorseger.cursomc.services.CidadeService;
 import com.victorseger.cursomc.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.net.URI;
-import java.util.List;
-import java.util.stream.Collectors;
-
 
 @Controller
 @RequestMapping(value = "/clientes")

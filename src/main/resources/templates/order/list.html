@@ -1,5 +1,5 @@
 <html layout:decorate="~{/layouts/main}" xmlns:layout="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.w3.org/1999/xhtml">
+      xmlns:th="http://www.w3.org/1999/xhtml"  xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <div layout:fragment="content">
     <div class="content-wrapper">
@@ -29,25 +29,29 @@
                             <thead class="text-center">
                             <tr>
                                 <th th:text="#{order.date}"></th>
-                                <th th:text="#{order.client}"></th>
+                                <th th:text="#{order.items}"></th>
                                 <th th:text="#{order.total}"></th>
-                                <th th:text="#{options}"></th>
+                                <th sec:authorize="hasRole('ROLE_ADMIN')" th:text="#{options}"></th>
                             </tr>
                             </thead>
                             <tfoot class="text-center">
                             <tr>
                                 <th th:text="#{order.date}"></th>
-                                <th th:text="#{order.client}"></th>
+                                <th th:text="#{order.items}"></th>
                                 <th th:text="#{order.total}"></th>
-                                <th th:text="#{options}"></th>
+                                <th sec:authorize="hasRole('ROLE_ADMIN')" th:text="#{options}"></th>
                             </tr>
                             </tfoot>
                             <tbody>
                             <tr th:each="order: ${orders}">
                                 <td th:text="${#dates.format(order.instante, 'yyyy/MM/dd HH:mm')}"></td>
-                                <td th:text="${order.cliente.nome}"></td>
+                                <td>
+                                    <ul>
+                                        <li th:each="item: ${order.itens}" th:text="${item.id.produto.nome}"></li>
+                                    </ul>
+                                </td>
                                 <td th:text="${#numbers.formatCurrency(order.valorTotal)}"></td>
-                                <td class="text-center">
+                                <td sec:authorize="hasRole('ROLE_ADMIN')" class="text-center">
                                     <a class="btn btn-primary" th:text="#{edit}"
                                        th:href="@{|/pedidos/editar/${order.id}|}"></a>
                                     <button class="btn btn-danger" th:text="#{cancel}"

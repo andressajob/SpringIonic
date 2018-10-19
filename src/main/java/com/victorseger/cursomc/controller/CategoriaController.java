@@ -1,25 +1,17 @@
 package com.victorseger.cursomc.controller;
 
 import com.victorseger.cursomc.domain.Categoria;
-import com.victorseger.cursomc.dto.CategoriaDTO;
 import com.victorseger.cursomc.services.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import javax.validation.Valid;
-import java.net.URI;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Controller
+@Secured({"ROLE_ADMIN"})
 @RequestMapping(value = "/categorias")
 public class CategoriaController {
 

@@ -5,6 +5,7 @@ import com.victorseger.cursomc.services.CategoriaService;
 import com.victorseger.cursomc.services.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import javax.validation.Valid;
 
 
 @Controller
+@Secured({"ROLE_ADMIN"})
 @RequestMapping(value = "/produtos")
 public class ProdutoController {
 

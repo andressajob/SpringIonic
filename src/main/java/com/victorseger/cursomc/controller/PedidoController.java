@@ -7,6 +7,7 @@ import com.victorseger.cursomc.services.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MimeTypeUtils;
@@ -53,6 +54,7 @@ public class PedidoController {
         return new ModelAndView("redirect:/pedidos/itens" + pedido.getId());
     }
 
+    @Secured({"ROLE_ADMIN"})
     @GetMapping("/editar/{id}")
     public ModelAndView updateOrder(@PathVariable int id, Model model) {
         return new ModelAndView("redirect:/pedidos/itens/" + id);
