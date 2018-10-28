@@ -1,4 +1,4 @@
-package com.victorseger.cursomc;
+package com.victorseger.svtech;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

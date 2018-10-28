@@ -41,4 +41,22 @@
         </div>
     </div>
 </div>
+<th:block layout:fragment="js-view">
+    <script>
+        function errorAlert() {
+            swal({
+                title: "Erro!",
+                text: "Não foi possível incluir esta categoria. Existe uma categoria registrada com este mesmo nome.",
+                type: "error",
+                showCancelButton: false,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Ok",
+                allowOutsideClick: false
+            });
+        }
+
+        if ([[${error}]] == true)
+            errorAlert();
+    </script>
+</th:block>
 </html>

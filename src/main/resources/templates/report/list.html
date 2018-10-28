@@ -30,15 +30,15 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="product, row: ${products}">
+                            <tr th:each="product, row: ${products.keySet()}">
                                 <td th:text="${row.index + 1}"></td>
-                                <td th:text="${product.id.produto.nome}"></td>
+                                <td th:text="${product.nome}"></td>
                                 <td>
                                     <ul>
-                                        <li th:each="category: ${product.id.produto.categorias}" th:text="${category.nome}"></li>
+                                        <li th:each="category: ${product.categorias}" th:text="${category.nome}"></li>
                                     </ul>
                                 </td>
-                                <td th:text="${product.quantidade}"></td>
+                                <td th:text="${products.get(product)}"></td>
                             </tr>
                             </tbody>
                         </table>

@@ -33,7 +33,8 @@
                                        th:field="*{finalDate}">
                             </div>
                             <div class="col-md-3">
-                                <button class="btn btn-success form-control" style="margin-top: 32px;" type="submit" th:text="#{filter}"></button>
+                                <button class="btn btn-success form-control" style="margin-top: 32px;" type="submit"
+                                        th:text="#{filter}"></button>
                             </div>
                         </div>
                     </div>
@@ -90,22 +91,21 @@
                             <tr>
                                 <th th:text="#{position}"></th>
                                 <th th:text="#{product.name}"></th>
-                                <th th:text="#{order.date}"></th>
                                 <th th:text="#{category}"></th>
                                 <th th:text="#{order.qtd}"></th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="product, row: ${products}">
+                            <tbody>
+                            <tr th:each="product, row: ${products.keySet()}">
                                 <td th:text="${row.index + 1}"></td>
-                                <td th:text="${product.id.produto.nome}"></td>
-                                <td th:text="${product.id.pedido.instante}"></td>
+                                <td th:text="${product.nome}"></td>
                                 <td>
                                     <ul>
-                                        <li th:each="category: ${product.id.produto.categorias}" th:text="${category.nome}"></li>
+                                        <li th:each="category: ${product.categorias}" th:text="${category.nome}"></li>
                                     </ul>
                                 </td>
-                                <td th:text="${product.quantidade}"></td>
+                                <td th:text="${products.get(product)}"></td>
                             </tr>
                             </tbody>
                         </table>
@@ -146,7 +146,7 @@
 </div>
 <th:block layout:fragment="js-view">
     <script>
-    function errorAlert() {
+        function errorAlert() {
             swal({
                 title: "Erro!",
                 text: "Não foi possível excluir este produto. Existe(m) pedido(s) relacionado(s) a ele.",
