@@ -50,7 +50,7 @@ $(document).ready(function() {
 
 });
 
-$("#sumTotal").onclick(function () {
+$("#sumTotal").onClick(function () {
     var sell = $('#sell').val();
     var total = $('#sellingTotal').val();
     $.ajax({
