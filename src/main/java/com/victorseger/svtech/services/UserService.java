@@ -18,9 +18,10 @@ public class UserService {
     }
 
     public User save(User user) {
-
-        return userRepository.save(user);
-
+        if (user!=null){
+            return userRepository.save(user);
+        }
+        return null;
     }
 
     public List<User> findAll() {

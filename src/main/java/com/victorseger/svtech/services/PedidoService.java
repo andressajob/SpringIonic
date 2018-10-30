@@ -33,10 +33,13 @@ public class PedidoService {
     private ProdutoService produtoService;
 
     public Pedido find(Integer id) {
-        Optional<Pedido> obj = repo.findById(id);
+        if (id != null) {
+            Optional<Pedido> obj = repo.findById(id);
 
-        return obj.orElseThrow(() -> new ObjectNotFoundException(
-                "Objeto não encontrado! Id: " + ", Tipo: " + Pedido.class.getName()));
+            return obj.orElseThrow(() -> new ObjectNotFoundException(
+                    "Objeto não encontrado! Id: " + ", Tipo: " + Pedido.class.getName()));
+        }
+        return null;
     }
 
     public Pedido getOne(Integer id) {
