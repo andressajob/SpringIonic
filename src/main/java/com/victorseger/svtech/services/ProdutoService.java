@@ -32,21 +32,24 @@ public class ProdutoService {
     }
 
     public Produto save(Produto produto) {
-        if (repo.existsByNomeIgnoreCase(produto.getNome())) {
+        if (produto == null || repo.existsByNomeIgnoreCase(produto.getNome())) {
             return null;
         }
         return repo.save(produto);
     }
 
-    public boolean delete(int id) {
+    public boolean delete(Integer id) {
         boolean flag;
-        try {
-            if (flag = repo.existsById(id))
-                repo.deleteById(id);
-        } catch (DataIntegrityViolationException e) {
-            flag = false;
+        if (id != null) {
+            try {
+                if (flag = repo.existsById(id))
+                    repo.deleteById(id);
+            } catch (DataIntegrityViolationException e) {
+                flag = false;
+            }
+            return flag;
         }
-        return flag;
+        return false;
     }
 
 }

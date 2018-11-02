@@ -5,6 +5,7 @@ import com.victorseger.svtech.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -39,4 +40,5 @@ public class UserService {
             return userRepository.existsById(id);
         return false;
     }
+
 }

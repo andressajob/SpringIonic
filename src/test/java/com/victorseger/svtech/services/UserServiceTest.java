@@ -1,9 +1,8 @@
-package com.victorseger.svtech.service;
+package com.victorseger.svtech.services;
 
 import com.victorseger.svtech.domain.Role;
 import com.victorseger.svtech.domain.User;
 import com.victorseger.svtech.repositories.RoleRepository;
-import com.victorseger.svtech.services.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -66,5 +65,16 @@ public class UserServiceTest {
     public void test_save_null_object() {
         assertThat(userService.save(null)).isNull();
     }
+
+    @Test
+    public void test_existsById_id_invalid() {
+        assertThat(userService.existsById(-1L)).isFalse();
+    }
+
+    @Test
+    public void test_existsById_id_null() {
+        assertThat(userService.existsById(null)).isFalse();
+    }
+
 
 }

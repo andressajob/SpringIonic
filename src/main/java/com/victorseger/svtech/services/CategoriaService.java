@@ -28,7 +28,7 @@ public class CategoriaService {
     }
 
     public Categoria insert(Categoria categoria) {
-        if (categoria.getNome() != null && !categoria.getNome().isEmpty() && !repo.existsByNomeIgnoreCase(categoria.getNome())) {
+        if (categoria != null && categoria.getNome() != null && !categoria.getNome().isEmpty() && !repo.existsByNomeIgnoreCase(categoria.getNome())) {
             categoria.setId(null);
             return repo.save(categoria);
         }
@@ -36,7 +36,7 @@ public class CategoriaService {
     }
 
     public Categoria update(Categoria categoria) {
-        if (categoria.getNome() != null && !categoria.getNome().isEmpty()) {
+        if (categoria != null && categoria.getNome() != null && !categoria.getNome().isEmpty()) {
             Categoria newCategoria = find(categoria.getId());
             //chama o método auxiliar para apenas atualizar os campos desejados do categoria e não remover nenhum valor de outro campo
             updateData(newCategoria, categoria);
@@ -45,15 +45,18 @@ public class CategoriaService {
     }
 
     public boolean delete(Integer id) {
-        boolean flag = true;
-        find(id);
-        try {
-            repo.deleteById(id);
-        } catch (DataIntegrityViolationException e) {
-            flag = false;
-            //throw new DataIntegrityException("Não é possível excluir categoria que possui produtos");
+        if (id != null) {
+            boolean flag = true;
+            find(id);
+            try {
+                repo.deleteById(id);
+            } catch (DataIntegrityViolationException e) {
+                flag = false;
+                //throw new DataIntegrityException("Não é possível excluir categoria que possui produtos");
+            }
+            return flag;
         }
-        return flag;
+        return false;
     }
 
     public List<Categoria> findAll() {

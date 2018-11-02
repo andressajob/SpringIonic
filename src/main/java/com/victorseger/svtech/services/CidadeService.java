@@ -16,34 +16,36 @@ public class CidadeService {
     @Autowired
     private CidadeRepository repository;
 
-    public List<Cidade> findByEstado(Integer estadoId) {
-        return repository.findCidades(estadoId);
-    }
-
     public List<Cidade> findAll() {
         return repository.findAll();
     }
 
     public Cidade find(Integer id) {
-        Optional<Cidade> obj = repository.findById(id);
+        if (id != null) {
+            Optional<Cidade> obj = repository.findById(id);
 
-        return obj.orElseThrow(() -> new ObjectNotFoundException(
-                "Objeto não encontrado! Id: " + ", Tipo: " + Cidade.class.getName()));
+            return obj.orElseThrow(() -> new ObjectNotFoundException(
+                    "Objeto não encontrado! Id: " + ", Tipo: " + Cidade.class.getName()));
+        }
+        return null;
     }
 
     public Cidade getOne(Integer id) {
-        return repository.getOne(id);
+        if (id != null) {
+            return repository.getOne(id);
+        }
+        return null;
     }
 
     public Cidade insert(Cidade cidade) {
-        if (cidade.getNome() != null && !cidade.getNome().isEmpty()) {
+        if (cidade != null && cidade.getNome() != null && !cidade.getNome().isEmpty()) {
             cidade.setId(null);
             return repository.save(cidade);
         } else return null;
     }
 
     public Cidade update(Cidade cidade) {
-        if (cidade.getNome() != null && !cidade.getNome().isEmpty()) {
+        if (cidade != null && cidade.getNome() != null && !cidade.getNome().isEmpty()) {
             Cidade newCidade = find(cidade.getId());
             //chama o método auxiliar para apenas atualizar os campos desejados do cidade e não remover nenhum valor de outro campo
             updateData(newCidade, cidade);
@@ -51,15 +53,18 @@ public class CidadeService {
         } else return null;
     }
 
-    public boolean delete(Integer id) {
+    public boolean delete(Integer idCategoria) {
         boolean flag = true;
-        find(id);
-        try {
-            repository.deleteById(id);
-        } catch (DataIntegrityViolationException e) {
-            flag = false;
+        if (idCategoria != null) {
+            find(idCategoria);
+            try {
+                repository.deleteById(idCategoria);
+            } catch (DataIntegrityViolationException e) {
+                flag = false;
+            }
+            return flag;
         }
-        return flag;
+        return false;
     }
 
     private void updateData(Cidade newCidade, Cidade cidade) {

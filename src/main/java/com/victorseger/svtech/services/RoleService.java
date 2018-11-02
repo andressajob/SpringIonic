@@ -30,4 +30,10 @@ public class RoleService {
         return false;
     }
 
+    public Role findByRole(String role) {
+        if (role != null) {
+            return roleRepository.findByRole(role);
+        }
+        return null;
+    }
 }

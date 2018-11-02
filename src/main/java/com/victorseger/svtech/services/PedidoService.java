@@ -26,11 +26,6 @@ public class PedidoService {
     @Autowired
     private ClienteService clienteService;
 
-    @Autowired
-    private CategoriaService categoriaService;
-
-    @Autowired
-    private ProdutoService produtoService;
 
     public Pedido find(Integer id) {
         if (id != null) {
@@ -48,17 +43,19 @@ public class PedidoService {
 
     @Transactional
     public Pedido insert(Pedido pedido) {
-        pedido.setId(null);
-        pedido.setInstante(new Date());
-        pedido.setCliente(clienteService.find(pedido.getCliente().getId()));
-        if (!pedido.getItens().isEmpty()) {
-            double soma = 0;
-            for (ItemPedido itemPedido : pedido.getItens()) {
-                soma += itemPedido.getPreco();
+        if (pedido != null) {
+            pedido.setId(null);
+            pedido.setInstante(new Date());
+            pedido.setCliente(clienteService.find(pedido.getCliente().getId()));
+            if (!pedido.getItens().isEmpty()) {
+                double soma = 0;
+                for (ItemPedido itemPedido : pedido.getItens()) {
+                    soma += itemPedido.getPreco();
+                }
+                pedido.setValorTotal(soma);
             }
-            pedido.setValorTotal(soma);
+            pedido = repo.save(pedido);
         }
-        pedido = repo.save(pedido);
         return pedido;
 
     }
@@ -84,9 +81,12 @@ public class PedidoService {
     }
 
     public Pedido update(Pedido pedido) {
-        Pedido newPedido = find(pedido.getId());
-        updateData(newPedido, pedido);
-        return repo.save(newPedido);
+        if (pedido != null) {
+            Pedido newPedido = find(pedido.getId());
+            updateData(newPedido, pedido);
+            return repo.save(newPedido);
+        }
+        return null;
     }
 
     private void updateData(Pedido newPedido, Pedido pedido) {
@@ -95,7 +95,10 @@ public class PedidoService {
     }
 
     public ItemPedido findItemById(Pedido pedido, Produto produto) {
-        return itemPedidoRepository.findById_PedidoAndId_Produto(pedido, produto);
+        if (pedido != null && produto != null) {
+            return itemPedidoRepository.findById_PedidoAndId_Produto(pedido, produto);
+        }
+        return null;
     }
 
     public void insertItem(ItemPedido itemPedido) {
@@ -143,43 +146,4 @@ public class PedidoService {
         return itemPedidoRepository.findById_PedidoAndId_Produto(pedido, produto) != null;
     }
 
-    public Integer[][] topSellingProducts() {
-        return itemPedidoRepository.topSellingProducts();
-    }
-
-    public List<Pedido> topOrders() {
-        return repo.ordersByTotalValor();
-    }
-
-    public List<Pedido> filterOrders(LocalDate initDate, LocalDate finalDate) {
-        return repo.filterOrders(initDate, finalDate);
-    }
-
-    public Integer[][] filterProducts(LocalDate initialDate, LocalDate finalDate) {
-        return itemPedidoRepository.filterProducts(initialDate, finalDate);
-    }
-
-    public Integer[][] topSellingCategories() {
-        return itemPedidoRepository.topSellingCategories();
-    }
-
-    public Map<Categoria, Integer> transformCategoryMatrix(Integer[][] matrix) {
-        Map<Categoria, Integer> map = new LinkedHashMap<>();
-        for (int i = 0; i < matrix.length; i++) {
-            map.put(categoriaService.find(matrix[i][0]), matrix[i][1]);
-        }
-        return map;
-    }
-
-    public Map<Produto, Integer> transformProductMatrix(Integer[][] matrix) {
-        Map<Produto, Integer> map = new LinkedHashMap<>();
-        for (int i = 0; i < matrix.length; i++) {
-            map.put(produtoService.find(matrix[i][0]), matrix[i][1]);
-        }
-        return map;
-    }
-
-    public Integer[][] filterCategories(LocalDate initDate, LocalDate finalDate) {
-        return itemPedidoRepository.filterCategories(initDate, finalDate);
-    }
 }

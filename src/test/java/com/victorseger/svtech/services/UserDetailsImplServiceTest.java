@@ -1,9 +1,8 @@
-package com.victorseger.svtech.service;
+package com.victorseger.svtech.services;
 
 
 import com.victorseger.svtech.domain.User;
 import com.victorseger.svtech.repositories.UserRepository;
-import com.victorseger.svtech.services.UserDetailsImplService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

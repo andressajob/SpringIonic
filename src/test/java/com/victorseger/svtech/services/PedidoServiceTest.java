@@ -1,7 +1,7 @@
-package com.victorseger.svtech.service;
+package com.victorseger.svtech.services;
 
 
-import com.victorseger.svtech.services.PedidoService;
+import com.victorseger.svtech.domain.Produto;
 import com.victorseger.svtech.services.exceptions.ObjectNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,8 +22,11 @@ public class PedidoServiceTest {
     @Autowired
     private PedidoService pedidoService;
 
+    @Autowired
+    private ProdutoService produtoService;
+
     @Test
-    public void test_getOne_should_retrieve_category_by_id() {
+    public void test_getOne_should_retrieve_order_by_id() {
         assertThat(pedidoService.find(1)).isNotNull();
     }
 
@@ -51,5 +54,47 @@ public class PedidoServiceTest {
     public void test_existsById_id_null() {
         assertThat(pedidoService.existsById(null)).isFalse();
     }
+
+    @Test
+    public void test_find_null() {
+        assertThat(pedidoService.find(null)).isNull();
+    }
+
+    @Test(expected = ObjectNotFoundException.class)
+    public void test_find_invalid() {
+        pedidoService.find(-1);
+    }
+
+    @Test
+    public void test_find() {
+        assertThat(pedidoService.find(1)).isNotNull();
+    }
+
+    @Test
+    public void test_insert_null() {
+        assertThat(pedidoService.insert(null)).isNull();
+    }
+
+    @Test(expected = ObjectNotFoundException.class)
+    public void test_delete_invalid() {
+        pedidoService.delete(-1);
+    }
+
+    @Test
+    public void test_update() {
+        assertThat(pedidoService.update(pedidoService.find(1))).isNotNull();
+    }
+
+    @Test
+    public void test_update_null() {
+        assertThat(pedidoService.update(null)).isNull();
+    }
+
+    @Test
+    public void test_findItemById_null() {
+        assertThat(pedidoService.findItemById(null, null)).isNull();
+    }
+
+
 
 }

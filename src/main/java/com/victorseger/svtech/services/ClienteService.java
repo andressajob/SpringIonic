@@ -34,35 +34,46 @@ public class ClienteService {
     private int size;
 
     public Cliente find(Integer id) {
-        Optional<Cliente> obj = repo.findById(id);
+        if (id != null) {
+            Optional<Cliente> obj = repo.findById(id);
 
-        return obj.orElseThrow(() -> new ObjectNotFoundException(
-                "Objeto não encontrado! Id: " + ", Tipo: " + Cliente.class.getName()));
+            return obj.orElseThrow(() -> new ObjectNotFoundException(
+                    "Objeto não encontrado! Id: " + ", Tipo: " + Cliente.class.getName()));
+        }
+        return null;
     }
 
     public Cliente insert(Cliente cliente) {
-        cliente.setId(null);
-        cliente = repo.save(cliente);
-        enderecoRepository.saveAll(cliente.getEnderecos());
+        if (cliente != null) {
+            cliente.setId(null);
+            cliente = repo.save(cliente);
+            enderecoRepository.saveAll(cliente.getEnderecos());
+        }
         return cliente;
     }
 
     public Cliente update(Cliente cliente) {
-        Cliente newCliente = find(cliente.getId());
-        //chama o método auxiliar para apenas atualizar os campos desejados do cliente e não remover nenhum valor de outro campo
-        updateData(newCliente, cliente);
-        return repo.save(newCliente);
+        if (cliente != null) {
+            Cliente newCliente = find(cliente.getId());
+            //chama o método auxiliar para apenas atualizar os campos desejados do cliente e não remover nenhum valor de outro campo
+            updateData(newCliente, cliente);
+            return repo.save(newCliente);
+        }
+        return null;
     }
 
     public boolean delete(Integer id) {
-        boolean flag;
-        try {
-            if (flag = repo.existsById(id))
-                repo.deleteById(id);
-        } catch (DataIntegrityViolationException e) {
-            flag = false;
+        if (id != null) {
+            boolean flag = repo.existsById(id);
+            try {
+                if (flag)
+                    repo.deleteById(id);
+            } catch (DataIntegrityViolationException e) {
+                flag = false;
+            }
+            return flag;
         }
-        return flag;
+        return false;
     }
 
     public List<Cliente> findAll() {
@@ -78,12 +89,14 @@ public class ClienteService {
     }
 
     public void insertAddress(Endereco endereco) {
-        endereco.setId(null);
-        Cliente newCliente = repo.getOne(endereco.getCliente().getId());
-        endereco.setCliente(newCliente);
-        endereco = enderecoRepository.save(endereco);
-        newCliente.getEnderecos().add(endereco);
-        repo.save(newCliente);
+        if (endereco != null) {
+            endereco.setId(null);
+            Cliente newCliente = repo.getOne(endereco.getCliente().getId());
+            endereco.setCliente(newCliente);
+            endereco = enderecoRepository.save(endereco);
+            newCliente.getEnderecos().add(endereco);
+            repo.save(newCliente);
+        }
     }
 
     public void updateAddress(Endereco endereco) {
@@ -91,27 +104,31 @@ public class ClienteService {
     }
 
     public Endereco addressById(Integer id) {
-        if (enderecoRepository.existsById(id))
+        if (id != null && enderecoRepository.existsById(id))
             return enderecoRepository.getOne(id);
         return null;
     }
 
     public List<Endereco> findAllAddressByClientId(Integer id) {
-        return enderecoRepository.findAllByClienteId(id);
+        if (id != null) {
+            return enderecoRepository.findAllByClienteId(id);
+        }
+        return null;
     }
 
     public boolean deleteAddress(Integer id) {
-        boolean flag;
-        try {
-            if (flag = enderecoRepository.existsById(id))
-                enderecoRepository.deleteById(id);
-        } catch (DataIntegrityViolationException e) {
-            flag = false;
+        if(id!=null){
+            boolean flag = enderecoRepository.existsById(id);
+            try {
+                if (flag)
+                    enderecoRepository.deleteById(id);
+            } catch (DataIntegrityViolationException e) {
+                flag = false;
+            }
+            return flag;
         }
-        return flag;
-
+        return false;
     }
-
 
 
 }

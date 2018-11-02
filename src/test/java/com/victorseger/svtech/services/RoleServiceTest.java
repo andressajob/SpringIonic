@@ -1,6 +1,5 @@
-package com.victorseger.svtech.service;
+package com.victorseger.svtech.services;
 
-import com.victorseger.svtech.services.RoleService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ public class RoleServiceTest {
     private RoleService roleService;
 
     @Test
-    public void test_getOne_should_retrieve_category_by_id() {
+    public void test_getOne_should_retrieve_role_by_id() {
         assertThat(roleService.getOne(1L)).isNotNull();
     }
 
@@ -47,4 +46,15 @@ public class RoleServiceTest {
     public void test_existsById_id_null() {
         assertThat(roleService.existsById(null)).isFalse();
     }
+
+    @Test
+    public void test_findByRole_role_null() {
+        assertThat(roleService.findByRole(null)).isNull();
+    }
+
+    @Test
+    public void test_findByRole_id_null() {
+        assertThat(roleService.findByRole("Testing")).isNull();
+    }
+
 }

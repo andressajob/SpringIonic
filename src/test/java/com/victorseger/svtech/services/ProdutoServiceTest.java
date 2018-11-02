@@ -1,13 +1,12 @@
-package com.victorseger.svtech.service;
+package com.victorseger.svtech.services;
 
 import com.victorseger.svtech.domain.Produto;
-import com.victorseger.svtech.services.CategoriaService;
-import com.victorseger.svtech.services.ProdutoService;
 import com.victorseger.svtech.services.exceptions.ObjectNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +23,7 @@ public class ProdutoServiceTest {
     private ProdutoService produtoService;
 
     @Test
-    public void test_getOne_should_retrieve_category_by_id() {
+    public void test_getOne_should_retrieve_product_by_id() {
         assertThat(produtoService.find(1)).isNotNull();
     }
 
@@ -43,5 +42,43 @@ public class ProdutoServiceTest {
         assertThat(produtoService.findAll()).size().isEqualTo(PRODUCTS);
     }
 
+    @Test
+    public void test_find_null() {
+        assertThat(produtoService.find(null)).isNull();
+    }
 
+    @Test(expected = ObjectNotFoundException.class)
+    public void test_find_invalid() {
+        produtoService.find(-1);
+    }
+
+    @Test
+    public void test_find() {
+        assertThat(produtoService.find(1)).isNotNull();
+    }
+
+    @Test
+    public void test_save() {
+        assertThat(produtoService.save(new Produto(null, "Nome", 10.0))).isNotNull();
+    }
+
+    @Test
+    public void test_save_null_object() {
+        assertThat(produtoService.save(null)).isNull();
+    }
+
+    @Test
+    public void test_delete_id_invalid() {
+        assertThat(produtoService.delete(-1)).isFalse();
+    }
+
+    @Test
+    public void test_delete_id_null() {
+         assertThat(produtoService.delete(null)).isFalse();
+    }
+
+    @Test
+    public void test_delete() {
+        assertThat(produtoService.delete(1)).isTrue();
+    }
 }
