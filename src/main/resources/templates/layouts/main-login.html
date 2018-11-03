@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
       xmlns:layout="http://www.w3.org/1999/xhtml">
 
-<head th:insert="/layouts/fragments/scripts :: head"/>
+<head th:insert="layouts/fragments/scripts :: head"/>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
 <!-- Content Wrapper. Contains page content -->
 <div>
     <div layout:fragment="content"/>
 </div>
-<div th:insert="/layouts/fragments/scripts :: javascripts"/>
+<div th:insert="layouts/fragments/scripts :: javascripts"/>
 </body>
 </html>
