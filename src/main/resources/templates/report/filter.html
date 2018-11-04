@@ -79,9 +79,9 @@
             <div class="card mb-3" th:if="${products}">
                 <div class="card-body">
                     <div class="text-center">
-                        <span th:if="${#lists.isEmpty(products)}" th:text="#{listisempty}" class="badge"> </span>
+                        <span th:if="${products.isEmpty()}" th:text="#{listisempty}" class="badge"> </span>
                     </div>
-                    <div class="table-responsive" th:if="!${#lists.isEmpty(products)}">
+                    <div class="table-responsive" th:if="!${products.isEmpty()}">
                         <div class="card-header">
                             <i class="fa fa-table"></i>
                             <span th:text="#{product.topSelling}"></span>
