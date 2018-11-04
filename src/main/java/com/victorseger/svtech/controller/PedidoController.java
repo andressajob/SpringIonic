@@ -101,7 +101,7 @@ public class PedidoController {
         model.addAttribute("items", service.find(id).getItens());
         model.addAttribute("products", productService.findAll());
         model.addAttribute("newItem", itemPedido);
-        return new ModelAndView("/order/items/form");
+        return new ModelAndView("order/items/form");
     }
 
     @GetMapping("/itens/{id}/editar/{idItem}")
@@ -111,7 +111,7 @@ public class PedidoController {
         model.addAttribute("items", service.find(id).getItens());
         model.addAttribute("products", productService.findAll());
         model.addAttribute("newItem", service.findItemById(service.find(id), productService.find(idItem)));
-        return new ModelAndView("/order/items/form");
+        return new ModelAndView("order/items/form");
     }
 
     @GetMapping("/itens/{id}/excluir/{idItem}")
