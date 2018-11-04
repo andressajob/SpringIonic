@@ -31,7 +31,7 @@ public class ClienteController {
         model.addAttribute("clients", service.findAll());
         model.addAttribute("error", error);
         error = false;
-        return new ModelAndView("/client/list");
+        return new ModelAndView("client/list");
     }
 
     @GetMapping("/novo")
@@ -40,7 +40,7 @@ public class ClienteController {
         model.addAttribute("action", "new");
         model.addAttribute("types", TipoCliente.values());
         model.addAttribute("profiles", Perfil.values());
-        return new ModelAndView("/client/form");
+        return new ModelAndView("client/form");
     }
 
     @GetMapping("/editar/{id}")
@@ -49,7 +49,7 @@ public class ClienteController {
         model.addAttribute("action", "edit");
         model.addAttribute("types", TipoCliente.values());
         model.addAttribute("profiles", Perfil.values());
-        return new ModelAndView("/client/form");
+        return new ModelAndView("client/form");
     }
 
     @GetMapping("/excluir/{id}")
@@ -75,7 +75,7 @@ public class ClienteController {
         model.addAttribute("newAddress", endereco);
         model.addAttribute("error", error);
         error = false;
-        return new ModelAndView("/client/address/form");
+        return new ModelAndView("client/address/form");
     }
 
     @GetMapping("/enderecos/{id}/editar/{idEndereco}")
@@ -84,7 +84,7 @@ public class ClienteController {
         model.addAttribute("addresses", service.find(id).getEnderecos());
         model.addAttribute("cities", cidadeService.findAll());
         model.addAttribute("newAddress", service.addressById(idEndereco));
-        return new ModelAndView("/client/address/form");
+        return new ModelAndView("client/address/form");
     }
 
     @GetMapping("/enderecos/{id}/excluir/{idEndereco}")

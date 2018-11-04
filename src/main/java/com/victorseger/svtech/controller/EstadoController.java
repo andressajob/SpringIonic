@@ -24,14 +24,14 @@ public class EstadoController {
         model.addAttribute("states", service.findAll());
         model.addAttribute("error", error);
         error = false;
-        return new ModelAndView("/client/address/state/list");
+        return new ModelAndView("client/address/state/list");
     }
 
     @GetMapping("/novo")
     public ModelAndView newState(Model model) {
         model.addAttribute("state", new Estado());
         model.addAttribute("action", "new");
-        return new ModelAndView("/client/address/state/form");
+        return new ModelAndView("client/address/state/form");
     }
 
     @PostMapping("/salvar")
@@ -45,7 +45,7 @@ public class EstadoController {
     public ModelAndView editState(Model model, @PathVariable int id) {
         model.addAttribute("state", service.getOne(id));
         model.addAttribute("action", "edit");
-        return new ModelAndView("/client/address/state/form");
+        return new ModelAndView("client/address/state/form");
     }
 
     @GetMapping("/excluir/{id}")

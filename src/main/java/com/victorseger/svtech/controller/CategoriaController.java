@@ -24,7 +24,7 @@ public class CategoriaController {
         model.addAttribute("categories", service.findAll());
         model.addAttribute("error", error);
         error = false;
-        return new ModelAndView("/product/category/list");
+        return new ModelAndView("product/category/list");
     }
 
     @GetMapping("/novo")
@@ -33,7 +33,7 @@ public class CategoriaController {
         model.addAttribute("action", "new");
         model.addAttribute("error", error);
         error = false;
-        return new ModelAndView("/product/category/form");
+        return new ModelAndView("product/category/form");
     }
 
     @PostMapping("/salvar")
@@ -54,7 +54,7 @@ public class CategoriaController {
     public ModelAndView editCategory(Model model, @PathVariable int id) {
         model.addAttribute("category", service.find(id));
         model.addAttribute("action", "edit");
-        return new ModelAndView("/product/category/form");
+        return new ModelAndView("product/category/form");
     }
 
     @GetMapping("/excluir/{id}")

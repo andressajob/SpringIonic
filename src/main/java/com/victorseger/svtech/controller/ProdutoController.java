@@ -33,7 +33,7 @@ public class ProdutoController {
         model.addAttribute("products", service.findAll());
         model.addAttribute("error", error);
         error = false;
-        return new ModelAndView("/product/list");
+        return new ModelAndView("product/list");
     }
 
     @GetMapping("/novo")
@@ -45,7 +45,7 @@ public class ProdutoController {
         model.addAttribute("errorCategories", errorCategories);
         error = false;
         errorCategories = false;
-        return new ModelAndView("/product/form");
+        return new ModelAndView("product/form");
     }
 
     @GetMapping("/editar/{id}")
@@ -53,7 +53,7 @@ public class ProdutoController {
         model.addAttribute("product", service.find(id));
         model.addAttribute("categories", categoriaService.findAll());
         model.addAttribute("action", "edit");
-        return new ModelAndView("/product/form");
+        return new ModelAndView("product/form");
     }
 
     @GetMapping("/excluir/{id}")

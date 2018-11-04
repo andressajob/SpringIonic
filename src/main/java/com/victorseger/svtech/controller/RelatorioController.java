@@ -26,7 +26,7 @@ public class RelatorioController {
         model.addAttribute("products", relatorioService.transformProductMatrix(relatorioService.topSellingProducts()));
         model.addAttribute("orders", relatorioService.topOrders());
         model.addAttribute("categories", relatorioService.transformCategoryMatrix(relatorioService.topSellingCategories()));
-        return new ModelAndView("/report/list");
+        return new ModelAndView("report/list");
     }
 
     @GetMapping("/filtros")
@@ -34,7 +34,7 @@ public class RelatorioController {
         String[] objects = {"Produto", "Pedido", "Categoria"};
         model.addAttribute("objects", objects);
         model.addAttribute("filter", filter);
-        return new ModelAndView("/report/filter");
+        return new ModelAndView("report/filter");
     }
 
     @PostMapping("/filtrar")
@@ -51,6 +51,6 @@ public class RelatorioController {
         } else if ("Produto".equals(filter.getObject())){
             model.addAttribute("products", relatorioService.transformProductMatrix(relatorioService.filterProducts(filter.getInitialDate(), filter.getFinalDate())));
         }
-        return new ModelAndView("/report/filter");
+        return new ModelAndView("report/filter");
     }
 }

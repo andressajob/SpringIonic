@@ -26,7 +26,7 @@ public class CidadeController {
         model.addAttribute("cities", service.findAll());
         model.addAttribute("error", error);
         error = false;
-        return new ModelAndView("/client/address/city/list");
+        return new ModelAndView("client/address/city/list");
     }
 
     @GetMapping("/novo")
@@ -34,7 +34,7 @@ public class CidadeController {
         model.addAttribute("city", new Cidade());
         model.addAttribute("states", estadoService.findAll());
         model.addAttribute("action", "new");
-        return new ModelAndView("/client/address/city/form");
+        return new ModelAndView("client/address/city/form");
     }
 
     @PostMapping("/salvar")
@@ -49,7 +49,7 @@ public class CidadeController {
         model.addAttribute("city", service.getOne(id));
         model.addAttribute("states", estadoService.findAll());
         model.addAttribute("action", "edit");
-        return new ModelAndView("/client/address/city/form");
+        return new ModelAndView("client/address/city/form");
     }
 
     @GetMapping("/excluir/{id}")
