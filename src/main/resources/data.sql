@@ -53,7 +53,7 @@ INSERT INTO produto_categoria(produto_id, categoria_id) values
 
 -- CLIENTS
 INSERT INTO cliente (id, nome, email, cpf_ou_cnpj, senha, tipo) VALUES
-(1001,'Usuário Comum', 'vicktor.junior@gmail.com', '11111111111', 'senha', 1);
+(1,'Usuário Comum', 'vicktor.junior@gmail.com', '11111111111', 'senha', 1);
 
 -- STATES
 INSERT INTO estado (id, nome) VALUES
@@ -67,5 +67,5 @@ INSERT INTO cidade (id, nome, estado_id) VALUES
 
 -- ADDRESSES
 INSERT INTO endereco (id, logradouro, numero, complemento, bairro, cep, cidade_id, cliente_id) VALUES
-(1001, 'Endereço Padrão', '0', '', '', '00000000', 1001, 1001);
+(1, 'Endereço Padrão', '0', '', '', '00000000', 1001, 1);
 

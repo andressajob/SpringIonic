@@ -44,7 +44,7 @@ public class PedidoController {
         model.addAttribute("saved", saved);
         saved = false;
         model.addAttribute("orders", service.findAll());
-        return new ModelAndView("/order/list");
+        return new ModelAndView("order/list");
     }
 
     @PostMapping("/salvar")
@@ -87,7 +87,7 @@ public class PedidoController {
         model.addAttribute("items", new HashSet<>());
         model.addAttribute("products", productService.findAll());
         model.addAttribute("newItem", itemPedido);
-        return new ModelAndView("/order/items/form");
+        return new ModelAndView("order/items/form");
     }
 
     @GetMapping("/itens/{id}")
