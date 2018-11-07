@@ -27,12 +27,15 @@ public class ProdutoController {
 
     private boolean error;
     private boolean errorCategories;
+    private boolean saved;
 
     @GetMapping("/lista")
     public ModelAndView listProducts(Model model) {
         model.addAttribute("products", service.findAll());
         model.addAttribute("error", error);
         error = false;
+        model.addAttribute("saved", saved);
+        saved = false;
         return new ModelAndView("product/list");
     }
 
@@ -73,6 +76,7 @@ public class ProdutoController {
         }
         Produto savedProduto = service.save(produto);
         if (savedProduto != null && !savedProduto.getCategorias().isEmpty()){
+            saved = true;
             return new ModelAndView("redirect:/produtos/lista");
         } else {
             if (savedProduto == null){

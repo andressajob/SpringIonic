@@ -60,7 +60,7 @@ public class CategoriaService {
     }
 
     public List<Categoria> findAll() {
-        return repo.findAll();
+        return repo.findAllByOrderByNomeAsc();
     }
 
     public boolean existsById(Integer id) {

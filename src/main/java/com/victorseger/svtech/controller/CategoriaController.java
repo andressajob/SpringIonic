@@ -17,13 +17,17 @@ public class CategoriaController {
 
     @Autowired
     private CategoriaService service;
+
     private boolean error = false;
+    private boolean saved;
 
     @GetMapping("/lista")
     public ModelAndView listCategories(Model model) {
         model.addAttribute("categories", service.findAll());
         model.addAttribute("error", error);
         error = false;
+        model.addAttribute("saved", saved);
+        saved = false;
         return new ModelAndView("product/category/list");
     }
 
@@ -47,6 +51,7 @@ public class CategoriaController {
                 return new ModelAndView("redirect:/categorias/novo");
             }
         }
+        saved = true;
         return new ModelAndView("redirect:/categorias/lista");
     }
 

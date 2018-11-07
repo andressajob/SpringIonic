@@ -91,6 +91,21 @@
 
         if ([[${error}]] == true)
             errorAlert();
+
+        function savedAlert() {
+            swal({
+                title: "Sucesso!",
+                text: "Categoria salva.",
+                type: "success",
+                showCancelButton: false,
+                confirmButtonColor: "#5cdd7c",
+                confirmButtonText: "Ok",
+                allowOutsideClick: false
+            });
+        }
+
+        if ([[${saved}]] == true)
+            savedAlert();
     </script>
 </th:block>
 
